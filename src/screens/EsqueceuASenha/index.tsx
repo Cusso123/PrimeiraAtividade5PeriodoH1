@@ -1,33 +1,44 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { StackTypes } from '../../routes/stack';
 import UserService from '../../services/UserService/UserService';
 
-const EsqueceuSenha = () => {
+const EsqueceuASenha = () => {
   const [email, setEmail] = useState<string>('');
-
+  
+  const navigation = useNavigation<StackTypes>();
   const userService = new UserService();
 
-  const navigation = useNavigation<StackTypes>();
-
-  const handleNavegarLogin = () => {
+  const handleLogin = () => {
     navigation.navigate('Login');
   };
 
-  const handleEsqueceuSenha = async () => {
+  const handleEsqueceuASenha = async () => {
+    try {
+      const accountActive = await userService.accountExists(email);
 
-    const user = await userService.forgotPassword(email);
+      if (accountActive) {
+        const passwordSent = await userService.sendTemporaryPassword(email);
 
-    if (user) {
-      alert('Email de recuperação de senha enviado com sucesso ');
-    } else {
-      alert('Email inválidos');
+        if (passwordSent) {
+          Alert.alert('Email enviado', 'Uma senha temporária foi enviada para o seu e-mail.');
+        } else {
+          Alert.alert('Erro', 'Não foi possível enviar o e-mail. Tente novamente mais tarde.');
+        }
+      } else {
+        Alert.alert('Erro', 'E-mail não encontrado ou conta inativa.');
+      }
+    } catch (error) {
+      Alert.alert('Erro', 'Ocorreu um erro de conexão. Tente novamente mais tarde.');
     }
   };
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Text style={styles.backText}>←</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Esqueceu sua senha?</Text>
       <Text style={styles.description}>Não se preocupe! Acontece. Por favor, insira o e-mail associado à sua conta.</Text>
       <TextInput
@@ -36,10 +47,10 @@ const EsqueceuSenha = () => {
         onChangeText={setEmail}
         value={email}
       />
-      <TouchableOpacity onPress={handleEsqueceuSenha} style={styles.button}>
+      <TouchableOpacity onPress={handleEsqueceuASenha} style={styles.button}>
         <Text style={styles.buttonText}>Enviar</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleNavegarLogin} style={styles.button}>
+      <TouchableOpacity onPress={handleLogin} style={styles.button}>
         <Text style={styles.buttonText}>Lembra da senha? Conecte-se</Text>
       </TouchableOpacity>
     </View>
@@ -57,6 +68,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 20,
     left: 20,
+  },
+  backText: {
+    fontSize: 24,
+    color: '#784212',
   },
   backIcon: {
     width: 25,
@@ -102,4 +117,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default EsqueceuSenha;
+export default EsqueceuASenha;

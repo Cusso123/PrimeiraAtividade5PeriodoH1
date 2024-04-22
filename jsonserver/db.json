@@ -2,12 +2,12 @@
   "User": [
     {
       "id": 1,
-      "username": "h1",
+      "email": "h1",
       "password": "123"
     },
     {
       "id": 2,
-      "username": "h2",
+      "email": "h2",
       "password": "456"
     }
  ]

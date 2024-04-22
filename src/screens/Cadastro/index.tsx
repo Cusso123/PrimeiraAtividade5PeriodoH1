@@ -1,82 +1,87 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native';
 import { StackTypes } from '../../routes/stack';
 import UserService from '../../services/UserService/UserService';
 
 const Cadastro = () => {
-  const [email, setEmail] = useState<string>('');
-  const [nome, setNome] = useState<string>('');
-  const [sobrenome, setSobrenome] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [usernameError, setUsernameError] = useState(false);
+  const [email, setEmail] = useState('');
+  const [nome, setNome] = useState('');
+  const [sobrenome, setSobrenome] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmaPassword, setConfirmPassword] = useState('');
+  const [formError, setFormError] = useState('');
 
   const userService = new UserService();
-
   const navigation = useNavigation<StackTypes>();
 
-  const handleNavegarLogin = () => {
-    navigation.navigate('Login');
+  const validarPassword = (password: string) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    return regex.test(password);
   };
 
-  const handleLogin = async () => {
+  const handleCadastro = async () => {
+    if (!email || !nome || !sobrenome || !password || !confirmaPassword) {
+      setFormError('Todos os campos são obrigatórios');
+      return;
+    }
 
-    const user = await userService.addUser({
-      email,
-      firstName: nome,
-      lastName: sobrenome,
-      password,
-      username: '',
-    });
+    if (password !== confirmaPassword) {
+      setFormError('As senhas não correspondem');
+      return;
+    }
 
-    if (user) {
-      alert('Usuário autenticado com sucesso ' + nome);
-      setEmail('');
-      setPassword('');
-      setNome('');
-      setSobrenome('');
-    } else {
-      alert('Usuário e/ou senha inválidos');
+    if (!validarPassword(password)) {
+      setFormError('A senha deve ter no mínimo 8 caracteres, incluir pelo menos uma letra maiúscula e um número');
+      return;
+    }
+    
+    try {
+      const user = await userService.addUser({
+        email,
+        PrimeiroNome: nome,
+        UltimoNome: sobrenome,
+        password,
+        username: ''
+      });
+
+      if (user) {
+        Alert.alert('Cadastro realizado com sucesso!', `Bem-vindo(a) ${nome}`);
+        navigation.navigate('Login'); 
+      } else {
+        setFormError('Erro ao criar a conta. Tente novamente mais tarde.');
+      }
+    } catch (error) {
+      setFormError('Erro ao criar a conta. Tente novamente mais tarde.');
+      console.error(error);
     }
   };
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Text style={styles.backText}>←</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Criar uma conta</Text>
-      <TextInput
-        style={[styles.input, usernameError && styles.errorInput]}
-        placeholder="Seu Nome"
-        onChangeText={setNome}
-        value={nome}
-      />
-      <TextInput
-        style={[styles.input, usernameError && styles.errorInput]}
-        placeholder="Seu Sobrenome"
-        onChangeText={setSobrenome}
-        value={sobrenome}
-      />
-      <TextInput
-        style={[styles.input, usernameError && styles.errorInput]}
-        placeholder="Seu Email"
-        onChangeText={setEmail}
-        value={email}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        secureTextEntry={true}
-        onChangeText={setPassword}
-        value={password}
-      />
-      <Text style={styles.termsText}>
-        Ao criar uma conta ou assinar você concorda com nossos Termos e Condições
-      </Text>
-      <TouchableOpacity onPress={handleLogin} style={styles.button}>
+
+      <Image source={require('../../../assets/favicon.png')} style={styles.profileImage} />
+      <TouchableOpacity style={styles.imageUploadButton}>
+        <Text style={styles.imageUploadButtonText}>Adicionar imagem</Text>
+      </TouchableOpacity>
+
+      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Nome" onChangeText={setNome} value={nome} />
+      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Sobrenome" onChangeText={setSobrenome} value={sobrenome} />
+      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Email" onChangeText={setEmail} value={email} />
+      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Senha" secureTextEntry={true} onChangeText={setPassword} value={password} />
+      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Confirma a Senha" secureTextEntry={true} onChangeText={setConfirmPassword} value={confirmaPassword} />
+
+      {formError ? <Text style={styles.errorText}>{formError}</Text> : null}
+
+      <TouchableOpacity onPress={handleCadastro} style={styles.button}>
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleNavegarLogin} style={styles.button} activeOpacity={0.1}>
-        <Text style={styles.buttonText}>Conectar-se</Text>
-      </TouchableOpacity>
+
+      <Text style={styles.termsText}>Ao criar uma conta ou assinar você concorda com nossos Termos e Condições</Text>
     </View>
   );
 };
@@ -143,9 +148,47 @@ const styles = StyleSheet.create({
     color: '#784212',
     marginTop: 10,
     textAlign: 'center',
-  }
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    marginLeft: 20,
+    marginTop: 20,
+  },
+  backText: {
+    fontSize: 24,
+    color: '#784212',
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  imageUploadButton: {
+  width: '80%',
+  height: 40,
+  borderRadius: 20,
+  backgroundColor: '#784212', 
+  justifyContent: 'center',
+  alignItems: 'center',
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  elevation: 5,
+  marginTop: 15,
+  marginBottom: 20,
+  },
+  imageUploadButtonText: {
+  color: '#FFFFFF',
+  fontSize: 16,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+  },
 });
-
-
 
 export default Cadastro;
