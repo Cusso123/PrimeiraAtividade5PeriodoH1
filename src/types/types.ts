@@ -3,8 +3,7 @@ export interface User {
   username: string;
   password: string;
   email: string;
-  PrimeiroNome?: string;
-  UltimoNome?: string;
+  nomeCT?: string;
   gender?: string;
   image?: string;
   token?: string;

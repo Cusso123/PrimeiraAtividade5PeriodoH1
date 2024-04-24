@@ -22,7 +22,7 @@ class UserService {
   async login(email: string, password: string): Promise<User | undefined> {
     try {
       const response: AxiosResponse<User> = await axios.post(`${BASE_URL}/auth/login`, {
-        email,
+        username: email,
         password,
       });
       return response.data

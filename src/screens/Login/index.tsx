@@ -5,7 +5,7 @@ import { StackTypes } from '../../routes/stack';
 import UserService from '../../services/UserService/UserService';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [attempts, setAttempts] = useState(0);
 
@@ -18,17 +18,17 @@ const Login = () => {
       return;
     }
 
-    const isValidEmail = /\S+@\S+\.\S+/.test(email);
-    const isValidPassword = password.length >= 8 && /\d/.test(password) && /[A-Z]/.test(password);
+    //const isValidEmail = /\S+@\S+\.\S+/.test(email);
+    //const isValidPassword = password.length >= 8 && /\d/.test(password) && /[A-Z]/.test(password);
 
-    if (!isValidEmail || !isValidPassword) {
-      setAttempts((prev) => prev + 1);
-      Alert.alert("Erro", "E-mail ou senha inválidos.");
-      return;
-    }
+    // if (!isValidEmail || !isValidPassword) {
+    //   setAttempts((prev) => prev + 1);
+    //   Alert.alert("Erro", "E-mail ou senha inválidos.");
+    //   return;
+    // }
 
     try {
-      const user = await userService.login(email, password);
+      const user = await userService.login(username, password);
       if (user) {
         navigation.navigate('Home');
       } else {
@@ -57,10 +57,9 @@ const Login = () => {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
           autoCapitalize="none"
         />
         <TextInput

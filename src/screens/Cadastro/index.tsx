@@ -6,8 +6,8 @@ import UserService from '../../services/UserService/UserService';
 
 const Cadastro = () => {
   const [email, setEmail] = useState('');
-  const [nome, setNome] = useState('');
-  const [sobrenome, setSobrenome] = useState('');
+  const [username, setNome] = useState('');
+  const [nomeCompleto, setSobrenome] = useState('');
   const [password, setPassword] = useState('');
   const [confirmaPassword, setConfirmPassword] = useState('');
   const [formError, setFormError] = useState('');
@@ -21,7 +21,7 @@ const Cadastro = () => {
   };
 
   const handleCadastro = async () => {
-    if (!email || !nome || !sobrenome || !password || !confirmaPassword) {
+    if (!email || !username || !nomeCompleto || !password || !confirmaPassword) {
       setFormError('Todos os campos são obrigatórios');
       return;
     }
@@ -39,14 +39,14 @@ const Cadastro = () => {
     try {
       const user = await userService.addUser({
         email,
-        PrimeiroNome: nome,
-        UltimoNome: sobrenome,
+        username: '',
+        nomeCT: nomeCompleto,
         password,
-        username: ''
+
       });
 
       if (user) {
-        Alert.alert('Cadastro realizado com sucesso!', `Bem-vindo(a) ${nome}`);
+        Alert.alert('Cadastro realizado com sucesso!', `Bem-vindo(a) ${username}`);
         navigation.navigate('Login'); 
       } else {
         setFormError('Erro ao criar a conta. Tente novamente mais tarde.');
@@ -69,8 +69,8 @@ const Cadastro = () => {
         <Text style={styles.imageUploadButtonText}>Adicionar imagem</Text>
       </TouchableOpacity>
 
-      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Nome" onChangeText={setNome} value={nome} />
-      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Sobrenome" onChangeText={setSobrenome} value={sobrenome} />
+      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Username" onChangeText={setNome} value={username} />
+      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Nome Completo" onChangeText={setSobrenome} value={nomeCompleto} />
       <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Email" onChangeText={setEmail} value={email} />
       <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Senha" secureTextEntry={true} onChangeText={setPassword} value={password} />
       <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Confirma a Senha" secureTextEntry={true} onChangeText={setConfirmPassword} value={confirmaPassword} />

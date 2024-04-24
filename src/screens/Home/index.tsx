@@ -4,27 +4,28 @@ import { useNavigation, useRoute, RouteProp  } from '@react-navigation/native';
 import { User } from '../../types/types';
 
 const Home = () => {
-    const navigation = useNavigation();
-    const route = useRoute<RouteProp<{ params: User }, 'params'>>();
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<{ params: { username: string } }, 'params'>>();
 
-    const nome = route.params?.PrimeiroNome || 'Visitante';
-    const nomeCapitalizado = nome.charAt(0).toUpperCase() + nome.slice(1);
+  const nome = route.params?.username || 'Visitante';
+  const nomeCapitalizado = nome.charAt(0).toUpperCase() + nome.slice(1);
 
-    const handleNavigate = (screenName: string) => {
-        navigation.navigate(screenName as never);
-    };
+  const handleNavigate = (screenName: string) => {
+    navigation.navigate(screenName as never);
+  };
 
-    return (
-        <ScrollView style={styles.container}>
+  return (
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => handleNavigate('Menu')}>
-          <Text style={styles.headerIcon}>☰</Text>
+          <Text style={styles.headerIcon}>≡</Text>
         </TouchableOpacity>
-        <Text style={styles.headerText}>Olá, {nomeCapitalizado}{}</Text> {}
+        <Text style={styles.headerText}>Olá, {nomeCapitalizado}</Text>
       </View>
 
       <View style={styles.searchBar}>
-        <Text style={styles.searchText}>🔍 Buscar</Text>
+        <Text style={styles.searchIcon}>🔍</Text>
+        <Text style={styles.searchText}>Buscar</Text>
       </View>
 
       <Text style={styles.sectionTitle}>Comunidades</Text>
@@ -55,13 +56,13 @@ const Home = () => {
 
       <View style={styles.footer}>
         <TouchableOpacity onPress={() => handleNavigate('Home')}>
-          <Text style={styles.footerText}>🏠 Início</Text>
+          <Text style={styles.footerIcon}>🏠</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleNavigate('CriarGrupo')}>
-          <Text style={styles.footerText}>➕</Text>
+        <TouchableOpacity onPress={() => handleNavigate('CriarGrupo')} style={styles.addButton}>
+          <Text style={styles.footerIcon}>➕</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleNavigate('Perfil')}>
-          <Text style={styles.footerText}>👤 Perfil</Text>
+          <Text style={styles.footerIcon}>👤</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -70,56 +71,87 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f8d7b4',
+    flex: 1,
+    backgroundColor: '#F5CBA7',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
-    backgroundColor: '#feefde',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: '#784212',
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#F5CBA7',
   },
   headerIcon: {
-    fontSize: 24,
+    fontSize: 28,
+    color: '#F5CBA7',
   },
   searchBar: {
-    backgroundColor: '#feefde',
-    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    marginHorizontal: 16,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    height: 40,
+  },
+  searchIcon: {
+    fontSize: 18,
+    marginRight: 10,
+    color: '#F5CBA7',
   },
   searchText: {
     fontSize: 18,
+    color: '#F5CBA7',
   },
   sectionTitle: {
-    fontSize: 22,
-    padding: 10,
+    fontSize: 24,
+    padding: 16,
+    color: '#000000',
+    fontWeight: 'bold',
   },
   buttonContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    padding: 10,
+    paddingHorizontal: 16,
   },
   button: {
-    backgroundColor: '#fdc8a8',
+    backgroundColor: '#784212',
     padding: 20,
-    width: '48%',
-    marginBottom: 10,
     borderRadius: 10,
+    marginBottom: 10,
+    width: '48%',
   },
   buttonText: {
     fontSize: 18,
+    color: '#F5CBA7',
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   footer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#feefde',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#784212',
     paddingVertical: 20,
+    paddingHorizontal: 50,
   },
-  footerText: {
+  footerIcon: {
     fontSize: 24,
+    color: '#FFF1E6',
+  },
+  addButton: {
+    backgroundColor: '#FFF1E6',
+    borderRadius: 25,
+    padding: 6,
   }
 });
 

@@ -17,7 +17,7 @@ const CriarGrupo = () => {
     const navigation = useNavigation();
     const userService = new UserService();
     const route = useRoute<RouteProp<{params: User}, 'params'>>();
-    const username = route.params?.PrimeiroNome;
+    const username = route.params?.username;
 
 
     const validateForm = () => {
@@ -77,7 +77,7 @@ const CriarGrupo = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.headerIcon}>←</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Olá, {username}</Text>
@@ -125,14 +125,8 @@ const CriarGrupo = () => {
           onChangeText={setDescricao}
           value={descricao}
         />
-
-        <TouchableOpacity onPress={showDatePicker} style={styles.datePickerButton}>
-        <Text style={styles.datePickerText}>
-          Data de Revelação: {dataRevelacao.toLocaleDateString()}
-        </Text>
-        </TouchableOpacity>
-
-        {isDatePickerVisible && (
+        
+         {isDatePickerVisible && (
         <DateTimePicker
           testID="dateTimePicker"
           value={dataRevelacao}
@@ -141,7 +135,13 @@ const CriarGrupo = () => {
           onChange={handleDateChange}
           minimumDate={new Date()}
         />
-      )}
+        )}
+
+        <TouchableOpacity onPress={showDatePicker} style={styles.datePickerButton}>
+        <Text style={styles.datePickerText}>
+          Data de Revelação: {dataRevelacao.toLocaleDateString()}
+        </Text>
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.saveButton} onPress={() => {}}>
           <Text style={styles.saveButtonText}>Salvar</Text>

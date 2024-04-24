@@ -12,7 +12,7 @@ const Convite = () => {
     const userService = new UserService();
     const conviteId = 'ID_DO_CONVITE'; 
       
-    const nome = route.params?.PrimeiroNome || 'Visitante';
+    const nome = route.params?.username || 'Visitante';
     const nomeCapitalizado = nome.charAt(0).toUpperCase() + nome.slice(1);
 
     interface ServerResponse {
