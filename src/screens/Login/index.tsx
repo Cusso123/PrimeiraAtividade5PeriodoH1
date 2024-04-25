@@ -52,7 +52,7 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../../assets/favicon.png')} style={styles.logo} />
+      <Image source={require('../../../assets/Entrar.png')} style={styles.logo} />
       <Text style={styles.title}>Conecte-se</Text>
       <View style={styles.inputContainer}>
         <TextInput
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+    fontWeight: 'bold',
     color: '#784212', 
     marginBottom: 20,
   },

@@ -10,7 +10,7 @@ const CriarGrupo = () => {
     const [nomeDoGrupo, setNomeDoGrupo] = useState('');
     const [maxParticipantes, setMaxParticipantes] = useState('');
     const [valor, setValor] = useState('');
-    const [dataRevelacao, setDataRevelacao] = useState(new Date());
+    const [dataRevelacao, setDataRevelacao] = useState('');
     const [descricao, setDescricao] = useState('');
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -24,7 +24,7 @@ const CriarGrupo = () => {
         if (!nomeDoGrupo.trim() || nomeDoGrupo.length > 20) return 'Nome do grupo inválido (máximo de 20 caracteres).';
         if (!maxParticipantes.trim() || parseInt(maxParticipantes, 10) < 2) return 'A quantidade de participantes deve ser maior que 1.';
         if (!valor.trim() || parseFloat(valor.replace(',', '.')) <= 0) return 'O valor deve ser maior que 0.';
-        if (dataRevelacao <= new Date()) return 'A data de revelação do sorteio não pode ser retroativa.';
+        // if (dataRevelacao <= new Date()) return 'A data de revelação do sorteio não pode ser retroativa.';
         if (!descricao.trim()) return 'Por favor, adicione uma descrição ao grupo.';
         return '';
       };
@@ -49,7 +49,7 @@ const CriarGrupo = () => {
             setNomeDoGrupo('');
             setMaxParticipantes('');
             setValor('');
-            setDataRevelacao(new Date());
+            // setDataRevelacao(new Date());
             setDescricao('');
             navigation.navigate('Home' as never); 
           } else {
@@ -68,7 +68,7 @@ const CriarGrupo = () => {
       const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
         setDatePickerVisibility(Platform.OS === 'ios'); 
         if (event.type === 'set' && selectedDate && selectedDate > new Date()) {
-          setDataRevelacao(selectedDate);
+          // setDataRevelacao(selectedDate);
         } else {
           Alert.alert("Data inválida", "Escolha uma data futura.");
         }
@@ -92,7 +92,7 @@ const CriarGrupo = () => {
 
       <View style={styles.formContainer}>
         <View style={styles.imageUploadContainer}>
-            <Image source={require('../../../assets/favicon.png')} style={styles.groupImage} />
+            <Image source={require('../../../assets/Grupo.png')} style={styles.groupImage} />
           <TouchableOpacity style={styles.imageButton}>
             <Text style={styles.imageButtonText}>Adicionar imagem</Text>
           </TouchableOpacity>
@@ -125,8 +125,14 @@ const CriarGrupo = () => {
           onChangeText={setDescricao}
           value={descricao}
         />
-        
-         {isDatePickerVisible && (
+        <TextInput
+        style={styles.input}
+        placeholder="Data de Revelação"
+        keyboardType="numeric" 
+        onChangeText={setDataRevelacao}
+        value={dataRevelacao}
+        />
+         {/* {isDatePickerVisible && (
         <DateTimePicker
           testID="dateTimePicker"
           value={dataRevelacao}
@@ -135,13 +141,13 @@ const CriarGrupo = () => {
           onChange={handleDateChange}
           minimumDate={new Date()}
         />
-        )}
+        )} */}
 
-        <TouchableOpacity onPress={showDatePicker} style={styles.datePickerButton}>
+        {/* <TouchableOpacity onPress={showDatePicker} style={styles.datePickerButton}>
         <Text style={styles.datePickerText}>
           Data de Revelação: {dataRevelacao.toLocaleDateString()}
         </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity style={styles.saveButton} onPress={() => {}}>
           <Text style={styles.saveButtonText}>Salvar</Text>
@@ -169,8 +175,10 @@ const styles = StyleSheet.create({
     color: '#784212',
   },
   headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
     color: '#784212',
-    fontSize: 16,
+    textAlign: 'center',
   },
   titleContainer: {
     backgroundColor: '#F8D7B4',
@@ -200,21 +208,26 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   imageButton: {
-  },
-  imageButtonText: {
-    color: '#000',
-    textDecorationLine: 'underline',
-  },
-  input: {
-    backgroundColor: '#FFF',
-    borderColor: '#784212',
-    borderWidth: 1,
+    width: '100%',
+    backgroundColor: '#784212',
     borderRadius: 5,
     padding: 10,
+  },
+  imageButtonText: {
+    color: '#FFF',
+    textAlign: 'center',
+    fontSize: 18,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
     marginBottom: 20,
-    color: '#000',
+    paddingHorizontal: 10,
   },
   saveButton: {
+    width: '100%',
     backgroundColor: '#784212',
     borderRadius: 5,
     padding: 10,

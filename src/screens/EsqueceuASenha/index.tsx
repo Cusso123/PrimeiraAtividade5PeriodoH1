@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     left: 20,
   },
   backText: {
+    fontWeight: 'bold',
     fontSize: 24,
     color: '#784212',
   },
@@ -84,6 +85,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
+    fontWeight: 'bold',
     color: '#784212', 
     marginBottom: 10,
   },

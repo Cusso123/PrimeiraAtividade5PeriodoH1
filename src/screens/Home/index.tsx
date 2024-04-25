@@ -20,6 +20,7 @@ const Home = () => {
         <TouchableOpacity onPress={() => handleNavigate('Menu')}>
           <Text style={styles.headerIcon}>≡</Text>
         </TouchableOpacity>
+        <Text style={styles.headerText1}>Bem-Vindo!</Text>
         <Text style={styles.headerText}>Olá, {nomeCapitalizado}</Text>
       </View>
 
@@ -55,8 +56,8 @@ const Home = () => {
       </View>
 
       <View style={styles.footer}>
-        <TouchableOpacity onPress={() => handleNavigate('Home')}>
-          <Text style={styles.footerIcon}>🏠</Text>
+        <TouchableOpacity onPress={() => handleNavigate('Login')}>
+          <Text style={styles.footerIcon}>Sair</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleNavigate('CriarGrupo')} style={styles.addButton}>
           <Text style={styles.footerIcon}>➕</Text>
@@ -86,6 +87,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#F5CBA7',
+  },
+  headerText1: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#F5CBA7',
+    textAlign: 'center',
   },
   headerIcon: {
     fontSize: 28,

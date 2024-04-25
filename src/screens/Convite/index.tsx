@@ -115,11 +115,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8D7B4',
   },
   headerIcon: {
+    fontWeight: 'bold',
     fontSize: 24,
     color: '#784212',
   },
   headerTitle: {
     color: '#784212',
+    fontWeight: 'bold',
     fontSize: 18,
   },
   content: {

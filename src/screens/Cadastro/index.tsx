@@ -64,7 +64,7 @@ const Cadastro = () => {
       </TouchableOpacity>
       <Text style={styles.title}>Criar uma conta</Text>
 
-      <Image source={require('../../../assets/favicon.png')} style={styles.profileImage} />
+      <Image source={require('../../../assets/Cadastrar.png')} style={styles.profileImage} />
       <TouchableOpacity style={styles.imageUploadButton}>
         <Text style={styles.imageUploadButtonText}>Adicionar imagem</Text>
       </TouchableOpacity>
@@ -94,12 +94,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5CBA7', 
   },
   icon: {
+    fontWeight: 'bold',
     width: 100,
     height: 100,
     marginBottom: 20,
   },
   title: {
     fontSize: 24,
+    fontWeight: 'bold',
     color: '#784212', 
     marginBottom: 20,
   },
@@ -155,6 +157,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   backText: {
+    fontWeight: 'bold',
     fontSize: 24,
     color: '#784212',
   },
