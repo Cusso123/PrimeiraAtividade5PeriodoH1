@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TextInput, Dimensions  } from 'react-native';
 import { useNavigation, useRoute, RouteProp  } from '@react-navigation/native';
 import { User } from '../../types/types';
+
+const screenHeight = Dimensions.get('window').height;
 
 const Home = () => {
   const navigation = useNavigation();
@@ -15,7 +17,8 @@ const Home = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => handleNavigate('Menu')}>
           <Text style={styles.headerIcon}>≡</Text>
@@ -37,6 +40,12 @@ const Home = () => {
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Futebol</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Diálogos</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Orações</Text>
+        </TouchableOpacity>
       </View>
 
       <Text style={styles.sectionTitle}>Grupos</Text>
@@ -51,10 +60,23 @@ const Home = () => {
           <Text style={styles.buttonText}>Times de Fute</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Bingo</Text>
+          <Text style={styles.buttonText}>Roda da Fortuna</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Bingo da Sorte</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Loteria dos Sonhos</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Caça ao Tesouro</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Banquete de Bônus</Text>
         </TouchableOpacity>
       </View>
-
+      </ScrollView>
+      
       <View style={styles.footer}>
         <TouchableOpacity onPress={() => handleNavigate('Login')}>
           <Text style={styles.footerIcon}>Sair</Text>
@@ -66,7 +88,7 @@ const Home = () => {
           <Text style={styles.footerIcon}>👤</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -74,6 +96,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5CBA7',
+  },
+  scrollContainer: {
+    flexGrow: 1,
   },
   header: {
     flexDirection: 'row',
@@ -129,6 +154,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+    
   },
   button: {
     backgroundColor: '#784212',

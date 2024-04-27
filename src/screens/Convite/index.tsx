@@ -88,14 +88,14 @@ const Convite = () => {
       </View>
 
       <View style={styles.footer}>
-        <TouchableOpacity onPress={() => handleNavigate('Home')}>
-          <Text style={styles.footerText}>🏠 Início</Text>
+        <TouchableOpacity onPress={() => handleNavigate('Login')}>
+          <Text style={styles.footerText}>Sair</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleNavigate('CriarGrupo')}>
+        <TouchableOpacity onPress={() => handleNavigate('CriarGrupo')} style={styles.addButton}>
           <Text style={styles.footerText}>➕</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleNavigate('Perfil')}>
-          <Text style={styles.footerText}>👤 Perfil</Text>
+          <Text style={styles.footerText}>👤 </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -105,22 +105,23 @@ const Convite = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8D7B4',
+    backgroundColor: '#F5CBA7',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#F8D7B4',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: '#784212',
   },
   headerIcon: {
     fontWeight: 'bold',
-    fontSize: 24,
-    color: '#784212',
+    fontSize: 28,
+    color: '#F5CBA7',
   },
   headerTitle: {
-    color: '#784212',
+    color: '#F5CBA7',
     fontWeight: 'bold',
     fontSize: 18,
   },
@@ -135,30 +136,38 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 30,
     color: '#784212',
+    fontWeight: 'bold',
   },
   button: {
     backgroundColor: '#784212',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginVertical: 10,
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 10,
+    width: '48%',
   },
   buttonText: {
-    color: '#FFFFFF',
     fontSize: 18,
+    color: '#F5CBA7',
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   footer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: '#784212',
     paddingVertical: 20,
-    backgroundColor: '#F8D7B4',
+    paddingHorizontal: 50,
   },
   footerText: {
     fontSize: 24,
-    color: '#784212',
+    color: '#FFF1E6',
   },
+  addButton: {
+    backgroundColor: '#FFF1E6',
+    borderRadius: 25,
+    padding: 6,
+  }
 });
 
 export default Convite;
