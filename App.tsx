@@ -1,3 +1,4 @@
+import React from "react";
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -7,7 +8,7 @@ import StackComponent from './src/routes/stack';
 export default function App() {
 
   return (
-   <StackComponent />
+  <StackComponent />
   );
 }
 

@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { StackTypes } from '../../routes/stack';
 import UserService from '../../services/UserService/UserService';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
   const navigation = useNavigation<StackTypes>();
@@ -17,15 +19,6 @@ const Login = () => {
       Alert.alert("Bloqueado", "Você excedeu o número de tentativas de login.");
       return;
     }
-
-    //const isValidEmail = /\S+@\S+\.\S+/.test(email);
-    //const isValidPassword = password.length >= 8 && /\d/.test(password) && /[A-Z]/.test(password);
-
-    // if (!isValidEmail || !isValidPassword) {
-    //   setAttempts((prev) => prev + 1);
-    //   Alert.alert("Erro", "E-mail ou senha inválidos.");
-    //   return;
-    // }
 
     try {
       const user = await userService.login(username, password);
@@ -49,26 +42,32 @@ const Login = () => {
     navigation.navigate('Cadastro');
   };
 
-
   return (
     <View style={styles.container}>
       <Image source={require('../../../assets/Entrar.png')} style={styles.logo} />
       <Text style={styles.title}>Conecte-se</Text>
       <View style={styles.inputContainer}>
+      <Text style={styles.label}>Username:</Text>
         <TextInput
           style={styles.input}
-          placeholder="Username"
+          placeholder=""
           value={username}
           onChangeText={setUsername}
           autoCapitalize="none"
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+      <Text style={styles.label}>Senha:</Text>
+        <View style={{justifyContent:'center', alignItems:'center'}}>
+          <TextInput
+            style={styles.input}
+            placeholder=""
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!passwordVisible}
+          />
+          <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)} style={styles.eyeIcon}>
+            <MaterialIcons name={passwordVisible ? 'visibility' : 'visibility-off'} size={24} color="gray" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <TouchableOpacity style={styles.forgotPassword} onPress={handleEsqueceuASenha}>
@@ -80,7 +79,7 @@ const Login = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.signUpButton} onPress={handleCadastro}>
-        <Text style={styles.signUpButtonText}>Não tem uma conta? Inscrever-se</Text>
+        <Text style={styles.signUpButtonText}>Não tem uma conta? <Text style={styles.signUpButtonText1}>Inscrever-se</Text></Text>
       </TouchableOpacity>
     </View>
   );
@@ -111,8 +110,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    marginBottom: 20,
+    borderRadius: 10,
+    marginBottom: 10,
     paddingHorizontal: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -123,13 +122,18 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  forgotPassword: {
-    width: '80%',
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#784212', 
-    justifyContent: 'center',
+  label: {
+    fontSize: 16,
+    color: '#784212',
+    marginBottom: 5,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    paddingHorizontal: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -138,16 +142,26 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    marginTop: 15,
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
+    height: '70%'
+  },
+  forgotPassword: {
+    marginVertical: 10,
+    width: '80%',
+    alignItems: 'flex-end',
   },
   forgotPasswordText: {
-    color: '#FFFFFF',
+    color: '#784212',
     fontSize: 16,
+    textAlign: 'right'
   },
   loginButton: {
     width: '80%',
     height: 40,
-    borderRadius: 20,
+    borderRadius: 10,
     backgroundColor: '#784212', 
     justifyContent: 'center',
     alignItems: 'center',
@@ -159,35 +173,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    marginTop: 15,
+    marginTop: 20,
   },
   loginButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
   },
   signUpButton: {
-    width: '80%',
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#784212', 
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    marginTop: 15,
+    marginTop: 20,
   },
   signUpButtonText: {
-    color: '#FFFFFF',
+    color: '#784212',
     fontSize: 16,
+  },  
+    signUpButtonText1: {
+    color: '#784212',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
   }
 });
-
-
 
 export default Login;

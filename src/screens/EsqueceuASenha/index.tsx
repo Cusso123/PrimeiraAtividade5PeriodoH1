@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { StackTypes } from '../../routes/stack';
 import UserService from '../../services/UserService/UserService';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
 
 const EsqueceuASenha = () => {
   const [email, setEmail] = useState<string>('');
@@ -37,21 +39,24 @@ const EsqueceuASenha = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Text style={styles.backText}>←</Text>
+      <MaterialIcons name="arrow-back" size={24} color='#784212' />
       </TouchableOpacity>
       <Text style={styles.title}>Esqueceu sua senha?</Text>
+      <View style={styles.inputContainer}>
       <Text style={styles.description}>Não se preocupe! Acontece. Por favor, insira o e-mail associado à sua conta.</Text>
+      <Text style={styles.label}>Senha:</Text>
       <TextInput
         style={styles.input}
-        placeholder="Insira o seu endereço de email"
+        placeholder=""
         onChangeText={setEmail}
         value={email}
       />
       <TouchableOpacity onPress={handleEsqueceuASenha} style={styles.button}>
-        <Text style={styles.buttonText}>Enviar</Text>
+        <Text style={styles.buttonText2}>Enviar</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleLogin} style={styles.button}>
-        <Text style={styles.buttonText}>Lembra da senha? Conecte-se</Text>
+    </View>
+      <TouchableOpacity onPress={handleLogin} style={styles.connectButton}>
+        <Text style={styles.buttonText}>Lembra da senha? <Text style={styles.buttonText1}>Conecte-se</Text></Text>
       </TouchableOpacity>
     </View>
   );
@@ -63,11 +68,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5CBA7', 
+    paddingHorizontal: 20,
   },
   backButton: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
+    alignSelf: 'flex-start',
+    marginTop: 20,
+    marginLeft: 20,
+  },
+  label: {
+    fontSize: 16,
+    color: '#784212',
+    marginBottom: 5,
   },
   backText: {
     fontWeight: 'bold',
@@ -83,38 +94,71 @@ const styles = StyleSheet.create({
     height: 100,
     marginBottom: 20,
   },
+  inputContainer: {
+    width: '80%',
+  },
   title: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#784212', 
-    marginBottom: 10,
+    marginBottom: 20,
+    textAlign: 'center',
   },
   description: {
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: 20,
     color: '#784212', 
-    paddingHorizontal: 30, 
+    fontSize: 16, 
   },
   input: {
-    width: '80%',
+    width: '100%',
     height: 40,
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    marginBottom: 20,
+    borderRadius: 10,
+    marginBottom: 10,
     paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   button: {
-    width: '80%',
+    width: '100%',
     height: 40,
-    borderRadius: 20,
+    borderRadius: 10,
     backgroundColor: '#784212', 
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginTop: 20,
   },
   buttonText: {
+    color: '#784212',
+    fontSize: 16,
+  },
+  buttonText1: {
+    color: '#784212',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+  },
+  buttonText2: {
     color: '#FFFFFF',
     fontSize: 16,
+  },
+  connectButton: {
+    marginTop: 20,
   }
 });
 

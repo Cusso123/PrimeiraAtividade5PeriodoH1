@@ -1,29 +1,38 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp, DrawerActions } from '@react-navigation/native';
 import UserService from '../../services/UserService/UserService';
-import { StackTypes } from '../../routes/stack';
 import { User } from '../../types/types';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 
+type RootStackParamList = {
+  Home: { username: string };
+  CriarGrupo: undefined;
+  Perfil: undefined;
+};
+
+type HomeScreenNavigationProp = DrawerNavigationProp<RootStackParamList, 'Home'>;
 
 const Convite = () => {
-    const navigation = useNavigation<StackTypes>();
-    const route = useRoute<RouteProp<{ params: User }, 'params'>>();
     const userService = new UserService();
     const conviteId = 'ID_DO_CONVITE'; 
-      
+    const navigation = useNavigation<HomeScreenNavigationProp>();
+    const route = useRoute<RouteProp<RootStackParamList, 'Home'>>();
+
     const nome = route.params?.username || 'Visitante';
     const nomeCapitalizado = nome.charAt(0).toUpperCase() + nome.slice(1);
 
+    const handleNavigate = (screenName: keyof RootStackParamList) => {
+      navigation.navigate(screenName);
+    }
+    
     interface ServerResponse {
         ok: boolean;
         mensagem?: string;
         grupoId?: string;
     }
-
-    const handleNavigate = (screenName: string) => {
-        navigation.navigate(screenName as never);
-    };
+        
     const handleAcceptInvite = async () => {
         try {
           const axiosResponse = await userService.acceptInvite(conviteId);
@@ -72,7 +81,7 @@ const Convite = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.headerIcon}>←</Text>
+        <MaterialIcons name="arrow-back" size={24} color='#F5CBA7' />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Olá, {nomeCapitalizado}</Text>
       </View>
@@ -84,18 +93,6 @@ const Convite = () => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleDeclineInvite}>
           <Text style={styles.buttonText}>Recusar</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.footer}>
-        <TouchableOpacity onPress={() => handleNavigate('Login')}>
-          <Text style={styles.footerText}>Sair</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleNavigate('CriarGrupo')} style={styles.addButton}>
-          <Text style={styles.footerText}>➕</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleNavigate('Perfil')}>
-          <Text style={styles.footerText}>👤 </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -159,14 +156,10 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 50,
   },
-  footerText: {
-    fontSize: 24,
-    color: '#FFF1E6',
-  },
   addButton: {
-    backgroundColor: '#FFF1E6',
-    borderRadius: 25,
-    padding: 6,
+    backgroundColor: '#000',
+    borderRadius: 35,
+    padding: 0,
   }
 });
 

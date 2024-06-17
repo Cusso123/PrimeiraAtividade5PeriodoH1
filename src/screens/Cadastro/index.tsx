@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native';
 import { StackTypes } from '../../routes/stack';
 import UserService from '../../services/UserService/UserService';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
 
 const Cadastro = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +13,8 @@ const Cadastro = () => {
   const [password, setPassword] = useState('');
   const [confirmaPassword, setConfirmPassword] = useState('');
   const [formError, setFormError] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
 
   const userService = new UserService();
   const navigation = useNavigation<StackTypes>();
@@ -39,10 +43,9 @@ const Cadastro = () => {
     try {
       const user = await userService.addUser({
         email,
-        username: '',
+        username,
         nomeCT: nomeCompleto,
         password,
-
       });
 
       if (user) {
@@ -60,28 +63,40 @@ const Cadastro = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Text style={styles.backText}>←</Text>
+      <MaterialIcons name="arrow-back" size={24} color='#784212' />
       </TouchableOpacity>
       <Text style={styles.title}>Criar uma conta</Text>
-
       <Image source={require('../../../assets/Cadastrar.png')} style={styles.profileImage} />
       <TouchableOpacity style={styles.imageUploadButton}>
         <Text style={styles.imageUploadButtonText}>Adicionar imagem</Text>
       </TouchableOpacity>
+      <View style={styles.inputContainer}>
+      <View style={styles.form}>
+        <Text style={styles.label}>Username:</Text>
+        <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="" onChangeText={setNome} value={username} />
+        <Text style={styles.label}>Nome Completo:</Text>
+        <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="" onChangeText={setSobrenome} value={nomeCompleto} />
+        <Text style={styles.label}>Email:</Text>
+        <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="" onChangeText={setEmail} value={email} />
+        <Text style={styles.label}>Senha:</Text>
+        <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="" secureTextEntry={true} onChangeText={setPassword} value={password} />
+        <Text style={styles.label}>Confirmar Senha:</Text>
+        <View style={{justifyContent:'center', alignItems:'center', width: '100%' }}>
+        <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="" onChangeText={setConfirmPassword} value={confirmaPassword} secureTextEntry={!passwordVisible} />
 
-      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Username" onChangeText={setNome} value={username} />
-      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Nome Completo" onChangeText={setSobrenome} value={nomeCompleto} />
-      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Email" onChangeText={setEmail} value={email} />
-      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Senha" secureTextEntry={true} onChangeText={setPassword} value={password} />
-      <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="Confirma a Senha" secureTextEntry={true} onChangeText={setConfirmPassword} value={confirmaPassword} />
-
+        <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)} style={styles.eyeIcon}>
+        <MaterialIcons name={passwordVisible ? 'visibility' : 'visibility-off'} size={24} color="gray" />
+        </TouchableOpacity>
+      </View>
+      </View>
       {formError ? <Text style={styles.errorText}>{formError}</Text> : null}
 
       <TouchableOpacity onPress={handleCadastro} style={styles.button}>
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
 
-      <Text style={styles.termsText}>Ao criar uma conta ou assinar você concorda com nossos Termos e Condições</Text>
+      <Text style={styles.termsText}>Ao criar uma conta ou assinar você concorda com nossos <Text style={styles.termsText1}>Termos e Condições</Text></Text>
+    </View>
     </View>
   );
 };
@@ -92,6 +107,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5CBA7', 
+    paddingHorizontal: 20,
   },
   icon: {
     fontWeight: 'bold',
@@ -104,13 +120,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#784212', 
     marginBottom: 20,
+    textAlign: 'center',
+  },
+  label: {
+    fontSize: 16,
+    color: '#784212',
+    marginBottom: 5,
+  },
+  inputContainer: {
+    width: '80%',
   },
   input: {
-    width: '80%',
+    width: '100%',
     height: 40,
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    marginBottom: 20,
+    borderRadius: 10,
+    marginBottom: 10,
     paddingHorizontal: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -121,13 +146,18 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
+    height: '70%'
+  },
   errorInput: {
     borderColor: 'red', 
   },
   button: {
-    width: '80%',
+    width: '100%',
     height: 40,
-    borderRadius: 20,
+    borderRadius: 10,
     backgroundColor: '#784212', 
     justifyContent: 'center',
     alignItems: 'center',
@@ -139,17 +169,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    marginTop: 15,
+    marginTop: 20,
   },
   buttonText: {
     color: '#FFFFFF',
     fontSize: 16,
   },
   termsText: {
-    fontSize: 12,
+    fontSize: 16,
     color: '#784212',
     marginTop: 10,
     textAlign: 'center',
+  },
+  termsText1: {
+    fontSize: 16,
+    color: '#784212',
+    marginTop: 10,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
   },
   backButton: {
     alignSelf: 'flex-start',
@@ -167,30 +205,34 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   imageUploadButton: {
-  width: '80%',
-  height: 40,
-  borderRadius: 20,
-  backgroundColor: '#784212', 
-  justifyContent: 'center',
-  alignItems: 'center',
-  shadowColor: '#000',
-  shadowOffset: {
-    width: 0,
-    height: 2,
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 3.84,
-  elevation: 5,
-  marginTop: 15,
-  marginBottom: 20,
+    width: '30%',
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#784212', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginTop: 20,
+    marginBottom: 10
   },
   imageUploadButtonText: {
-  color: '#FFFFFF',
-  fontSize: 16,
+    color: '#FFFFFF',
+    fontSize: 12,
   },
   errorText: {
     color: 'red',
     marginBottom: 10,
+  },
+  form: {
+    width: '100%',
+    alignItems: 'flex-start',
   },
 });
 

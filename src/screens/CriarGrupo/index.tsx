@@ -4,6 +4,7 @@ import { useNavigation, useRoute, RouteProp  } from '@react-navigation/native';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import UserService from '../../services/UserService/UserService';
 import { User } from '../../types/types';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 
 const CriarGrupo = () => {
@@ -17,7 +18,7 @@ const CriarGrupo = () => {
     const navigation = useNavigation();
     const userService = new UserService();
     const route = useRoute<RouteProp<{params: User}, 'params'>>();
-    const username = route.params?.username;
+    const nomeCapitalizado = route.params?.username;
 
 
     const validateForm = () => {
@@ -78,11 +79,11 @@ const CriarGrupo = () => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.headerIcon}>←</Text>
+        <MaterialIcons name="arrow-back" size={24} color='#F5CBA7' />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Olá, {username}</Text>
+        <Text style={styles.headerTitle}>Olá, {nomeCapitalizado}</Text>
         <TouchableOpacity onPress={() => {}}>
-          <Text style={styles.headerIcon}>👤</Text>
+        <MaterialIcons name="notifications" size={24} color='#F5CBA7'/>
         </TouchableOpacity>
       </View>
 
@@ -166,22 +167,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#F8D7B4',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: '#784212',
   },
   headerIcon: {
-    fontSize: 20,
-    color: '#784212',
+    fontWeight: 'bold',
+    fontSize: 28,
+    color: '#F5CBA7'
   },
   headerTitle: {
-    fontSize: 20,
+    color: '#F5CBA7',
     fontWeight: 'bold',
-    color: '#784212',
-    textAlign: 'center',
+    fontSize: 18,
   },
   titleContainer: {
-    backgroundColor: '#F8D7B4',
     paddingVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -208,10 +208,22 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   imageButton: {
-    width: '100%',
-    backgroundColor: '#784212',
-    borderRadius: 5,
-    padding: 10,
+    width: '30%',
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#784212', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginTop: 20,
+    marginBottom: 10
   },
   imageButtonText: {
     color: '#FFF',

@@ -1,51 +1,45 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TextInput, Dimensions  } from 'react-native';
-import { useNavigation, useRoute, RouteProp  } from '@react-navigation/native';
-import { User } from '../../types/types';
+import { Button, View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TextInput, Dimensions  } from 'react-native';
+import { useNavigation, useRoute, RouteProp, DrawerActions   } from '@react-navigation/native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+
 
 const screenHeight = Dimensions.get('window').height;
 
+type RootStackParamList = {
+  Home: { username: string };
+  CriarGrupo: undefined;
+  Perfil: undefined;
+};
+type HomeScreenNavigationProp = DrawerNavigationProp<RootStackParamList, 'Home'>;
+
+
 const Home = () => {
-  const navigation = useNavigation();
-  const route = useRoute<RouteProp<{ params: { username: string } }, 'params'>>();
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+  const route = useRoute<RouteProp<RootStackParamList, 'Home'>>();
 
   const nome = route.params?.username || 'Visitante';
   const nomeCapitalizado = nome.charAt(0).toUpperCase() + nome.slice(1);
 
-  const handleNavigate = (screenName: string) => {
-    navigation.navigate(screenName as never);
+  const handleNavigate = (screenName: keyof RootStackParamList) => {
+    navigation.navigate(screenName);
   };
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => handleNavigate('Menu')}>
-          <Text style={styles.headerIcon}>≡</Text>
+      <Text> </Text>
+        <Text style={styles.headerText1}>Olá, {nomeCapitalizado}</Text>
+        <TouchableOpacity onPress={() => {}}>
+        <MaterialIcons name="notifications" size={24} color='#F5CBA7'/>
         </TouchableOpacity>
-        <Text style={styles.headerText1}>Bem-Vindo!</Text>
-        <Text style={styles.headerText}>Olá, {nomeCapitalizado}</Text>
       </View>
 
       <View style={styles.searchBar}>
         <Text style={styles.searchIcon}>🔍</Text>
         <Text style={styles.searchText}>Buscar</Text>
-      </View>
-
-      <Text style={styles.sectionTitle}>Comunidades</Text>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Natal</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Futebol</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Diálogos</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Orações</Text>
-        </TouchableOpacity>
       </View>
 
       <Text style={styles.sectionTitle}>Grupos</Text>
@@ -78,14 +72,14 @@ const Home = () => {
       </ScrollView>
       
       <View style={styles.footer}>
-        <TouchableOpacity onPress={() => handleNavigate('Login')}>
-          <Text style={styles.footerIcon}>Sair</Text>
+      <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+      <MaterialIcons name="menu" size={35} color='#F5CBA7' />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleNavigate('CriarGrupo')} style={styles.addButton}>
-          <Text style={styles.footerIcon}>➕</Text>
+        <MaterialIcons name="add-circle" size={35} color='#F5CBA7' />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleNavigate('Perfil')}>
-          <Text style={styles.footerIcon}>👤</Text>
+        <MaterialIcons name="account-circle" size={35} color='#F5CBA7' />        
         </TouchableOpacity>
       </View>
     </View>
@@ -182,9 +176,9 @@ const styles = StyleSheet.create({
     color: '#FFF1E6',
   },
   addButton: {
-    backgroundColor: '#FFF1E6',
-    borderRadius: 25,
-    padding: 6,
+    backgroundColor: '#000',
+    borderRadius: 35,
+    padding: 0,
   }
 });
 
