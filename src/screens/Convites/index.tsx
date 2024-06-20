@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     marginBottom: 10,
-    width: '48%',
+    width: '50%',
   },
   buttonText: {
     fontSize: 18,

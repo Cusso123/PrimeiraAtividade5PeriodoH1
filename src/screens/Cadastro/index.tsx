@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   imageUploadButton: {
-    width: '30%',
+    width: '40%',
     height: 40,
     borderRadius: 10,
     backgroundColor: '#784212', 

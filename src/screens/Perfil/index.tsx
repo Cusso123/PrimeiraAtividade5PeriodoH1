@@ -43,6 +43,7 @@ const Perfil = () => {
                     <Text style={styles.editImageButtonText}>Editar Imagem</Text>
                 </TouchableOpacity>
             </View>
+
                 <Text style={styles.label}>Username:</Text>
                 <TextInput style={styles.input} placeholder="" />
                 <Text style={styles.label}>Nome Completo:</Text>
@@ -98,10 +99,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5CBA7',
         paddingHorizontal: 20,
         paddingVertical: 20,
+        alignItems: 'center'
     },
     form: {
-        width: '100%',
-        alignItems: 'flex-start',
+        width: '80%',
     },
     profileImage: {
         width: 100,
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     editImageButton: {
-        width: '30%',
+        width: '80%',
         height: 40,
         borderRadius: 10,
         backgroundColor: '#784212', 
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
         marginVertical: 20,
     },
     input: {
-        width: '100%',
+        width: '80%',
         height: 40,
         backgroundColor: '#FFFFFF',
         borderRadius: 10,
@@ -159,10 +160,12 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     saveButton: {
-        width: '100%',
+        width: '80%',
         backgroundColor: '#784212',
         borderRadius: 5,
         padding: 10,
+        marginTop: 20,
+        alignItems: 'center',
     },
     saveButtonText: {
         color: '#FFF',

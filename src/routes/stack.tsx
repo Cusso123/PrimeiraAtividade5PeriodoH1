@@ -11,6 +11,8 @@ import EsqueceuASenha from '../screens/EsqueceuASenha';
 import CriarGrupo from '../screens/CriarGrupo'; 
 import Convite from '../screens/Convite';
 import Perfil from '../screens/Perfil';
+import VisualizarMembro from '../screens/VisualizarMembro';
+import Sorteio from '../screens/VisualizarMembro';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +42,9 @@ export default function StackComponent(){
                 <Stack.Screen name="CriarGrupo" component={CriarGrupo} options={{ headerShown: false }}/>
                 <Stack.Screen name="Convite" component={Convite} options={{ headerShown: false }}/>
                 <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false }}/>
+                <Stack.Screen name="VisualizarMembro" component={VisualizarMembro} options={{ headerShown: false }}/>
+                <Stack.Screen name="Sorteio" component={Sorteio} options={{ headerShown: false }}/>
+
             </Stack.Navigator>
         </NavigationContainer>
     );
