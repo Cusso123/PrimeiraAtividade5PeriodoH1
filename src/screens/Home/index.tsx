@@ -41,7 +41,6 @@ const Home = () => {
         <Text style={styles.searchIcon}>🔍</Text>
         <Text style={styles.searchText}>Buscar</Text>
       </View>
-
       <Text style={styles.sectionTitle}>Grupos</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button}>
@@ -138,10 +137,11 @@ const styles = StyleSheet.create({
     color: '#F5CBA7',
   },
   sectionTitle: {
-    fontSize: 24,
-    padding: 16,
-    color: '#000000',
+    fontSize: 30,
     fontWeight: 'bold',
+    color: '#784212',
+    textAlign:'center',
+    marginBottom: 20,
   },
   buttonContainer: {
     flexDirection: 'row',

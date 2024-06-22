@@ -72,7 +72,7 @@ const CriarGrupo = () => {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <MaterialIcons name="arrow-back" size={24} color='#F5CBA7' />
@@ -82,59 +82,61 @@ const CriarGrupo = () => {
                     <MaterialIcons name="notifications" size={24} color='#F5CBA7' />
                 </TouchableOpacity>
             </View>
-
             <View style={styles.titleContainer}>
                 <Text style={styles.screenTitle}>Criar Grupo</Text>
             </View>
-
-            <View style={styles.formContainer}>
+        <View style={styles.formContainer}>
                 <View style={styles.imageUploadContainer}>
                     <Image source={require('../../../assets/Grupo.png')} style={styles.groupImage} />
                     <TouchableOpacity style={styles.imageButton}>
                         <Text style={styles.imageButtonText}>Adicionar imagem</Text>
                     </TouchableOpacity>
                 </View>
-
+            <View style={styles.labelContainer}>
+                <Text style={styles.label}>Nome do Grupo: </Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Nome do Grupo"
+                    placeholder=""
                     onChangeText={setNomeDoGrupo}
                     value={nomeDoGrupo}
                 />
+                <Text style={styles.label}>Quantidade Máxima de Participantes: </Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Quantidade Máxima de Participantes"
+                    placeholder=""
                     keyboardType="numeric"
                     onChangeText={setMaxParticipantes}
                     value={maxParticipantes}
                 />
+                <Text style={styles.label}>Valor: </Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Valor"
+                    placeholder=""
                     keyboardType="decimal-pad"
                     onChangeText={setValor}
                     value={valor}
                 />
+                <Text style={styles.label}>Descrição</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Descrição"
+                    placeholder=""
                     multiline
                     onChangeText={setDescricao}
                     value={descricao}
                 />
+                <Text style={styles.label}>Data de Revelação: </Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Data de Revelação"
                     keyboardType="numeric"
                     onChangeText={setDataRevelacao}
                     value={dataRevelacao}
                 />
-
+            </View>
                 <TouchableOpacity style={styles.saveButton} onPress={handleSalvarGrupo}>
                     <Text style={styles.saveButtonText}>Salvar</Text>
                 </TouchableOpacity>
-            </View>
-        </ScrollView>
+        </View>
+    </ScrollView>
     );
 };
 
@@ -161,6 +163,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
     },
+    labelContainer: {
+        width: '80%',
+        fontSize: 16,
+        color: '#784212',
+        marginBottom: 5,
+        justifyContent: 'center'
+    },
     titleContainer: {
         paddingVertical: 10,
         justifyContent: 'center',
@@ -179,8 +188,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     imageUploadContainer: {
+        width: '100%',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 10,
     },
     groupImage: {
         width: 100,
@@ -189,8 +199,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#E0E0E0',
         marginBottom: 10,
     },
+    label: {
+        width: '100%',
+        fontSize: 16,
+        color: '#784212',
+        marginBottom: 5,
+        justifyContent:'center',
+    },
     imageButton: {
-        width: '80%',
+        width: '40%',
         height: 40,
         borderRadius: 10,
         backgroundColor: '#784212',
@@ -213,7 +230,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     input: {
-      width: '80%',
+      width: '100%',
       height: 40,
       backgroundColor: '#FFFFFF',
       borderRadius: 10,

@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   },
   imageUploadButtonText: {
     color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: 16,
   },
   errorText: {
     color: 'red',

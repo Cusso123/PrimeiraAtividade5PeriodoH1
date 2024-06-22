@@ -24,38 +24,39 @@ const Perfil = () => {
     };
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                <MaterialIcons name="arrow-back" size={24} color='#F5CBA7' />
-                </TouchableOpacity>
-                <Text style={styles.headerText}>Olá, {nomeCapitalizado}</Text>
-                <TouchableOpacity onPress={() => {}}>
-                <MaterialIcons name="notifications" size={24} color='#F5CBA7'/>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.titleContainer}>
-            <Text style={styles.title}>Perfil</Text>
-            </View>
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <MaterialIcons name="arrow-back" size={24} color='#F5CBA7' />
+                    </TouchableOpacity>
+                    <Text style={styles.headerText}>Olá, {nomeCapitalizado}</Text>
+                    <TouchableOpacity onPress={() => {}}>
+                    <MaterialIcons name="notifications" size={24} color='#F5CBA7'/>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>Perfil</Text>
+                </View>
             <View style={styles.profileContainer}>
-            <View style={styles.imageUploadContainer}>
-                <Image source={require('../../../assets/Grupo.png')} style={styles.profileImage} />
-                <TouchableOpacity style={styles.editImageButton}>
-                    <Text style={styles.editImageButtonText}>Editar Imagem</Text>
-                </TouchableOpacity>
+                <View style={styles.imageUploadContainer}>
+                    <Image source={require('../../../assets/Grupo.png')} style={styles.profileImage} />
+                    <TouchableOpacity style={styles.editImageButton}>
+                        <Text style={styles.editImageButtonText}>Editar Imagem</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.labelContainer}>
+                    <Text style={styles.label}>Username:</Text>
+                    <TextInput style={styles.input} placeholder="" />
+                    <Text style={styles.label}>Nome Completo:</Text>
+                    <TextInput style={styles.input} placeholder="" />
+                    <Text style={styles.label}>Email:</Text>
+                    <TextInput style={styles.input} placeholder="" />
+                    <Text style={styles.label}>Senha:</Text>
+                    <TextInput style={styles.input} placeholder="" secureTextEntry />
+                    <TouchableOpacity style={styles.saveButton}>
+                        <Text style={styles.saveButtonText}>Salvar</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-
-                <Text style={styles.label}>Username:</Text>
-                <TextInput style={styles.input} placeholder="" />
-                <Text style={styles.label}>Nome Completo:</Text>
-                <TextInput style={styles.input} placeholder="" />
-                <Text style={styles.label}>Email:</Text>
-                <TextInput style={styles.input} placeholder="" />
-                <Text style={styles.label}>Senha:</Text>
-                <TextInput style={styles.input} placeholder="" secureTextEntry />
-                <TouchableOpacity style={styles.saveButton}>
-                    <Text style={styles.saveButtonText}>Salvar</Text>
-                </TouchableOpacity>
-        </View>
         </View>
     );
 };
@@ -79,6 +80,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
       },
     imageUploadContainer: {
+        width:'100%',
         alignItems: 'center',
         marginBottom: 20,
     },
@@ -96,10 +98,13 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     profileContainer: {
+        width:'100%',
         backgroundColor: '#F5CBA7',
         paddingHorizontal: 20,
         paddingVertical: 20,
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent:'center',
+        alignContent:'center'
     },
     form: {
         width: '80%',
@@ -111,12 +116,21 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     label: {
+        width: '100%',
         fontSize: 16,
         color: '#784212',
         marginBottom: 5,
+        justifyContent:'center',
+    },
+    labelContainer: {
+        width: '80%',
+        fontSize: 16,
+        color: '#784212',
+        marginBottom: 5,
+        justifyContent: 'center'
     },
     editImageButton: {
-        width: '80%',
+        width: '40%',
         height: 40,
         borderRadius: 10,
         backgroundColor: '#784212', 
@@ -139,12 +153,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     title: {
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: 'bold',
-        marginVertical: 20,
+        color: '#784212',
     },
     input: {
-        width: '80%',
+        width: '100%',
         height: 40,
         backgroundColor: '#FFFFFF',
         borderRadius: 10,
@@ -160,7 +174,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     saveButton: {
-        width: '80%',
+        width: '100%',
         backgroundColor: '#784212',
         borderRadius: 5,
         padding: 10,

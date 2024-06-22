@@ -53,7 +53,7 @@ const Membros = () => {
                             <MaterialIcons name="person" size={24} color='#F5CBA7' />
                             <Text style={styles.userName}>{item.name}</Text>
                             <TouchableOpacity>
-                                <MaterialIcons name="close" size={24} color='#F5CBA7' />
+                                <MaterialIcons name="close" size={24} color='#000' />
                             </TouchableOpacity>
                         </View>
                     )}
@@ -77,6 +77,7 @@ const Membros = () => {
 
 const styles = StyleSheet.create({
     container: {
+        width:'100%',
         flex: 1,
         backgroundColor: '#F5CBA7',
     },
@@ -99,21 +100,21 @@ const styles = StyleSheet.create({
         textAlign:'center'
     },
     title: {
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: 'bold',
-        marginVertical: 20,
+        color: '#784212',
         textAlign:'center'
     },
     userListContainer: {
-        width: '100%',
-        flex: 1,
+        width: '80%',
         paddingHorizontal: 10,
         paddingVertical: 10,
         fontSize: 18,
         justifyContent:'center',
+        alignSelf:'center',
     },
     userContainer: {
-        width: '80%',
+        width: '100%',
         height: 40,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -130,28 +131,26 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
         marginTop: 20,
-        marginBottom: 10
+        marginBottom: 10,
+        alignItems:'center'    
     },
     userName: {
+        textAlign:'left',
         fontSize: 18,
-        color: '#000',
+        color: '#FFF',
     },
     footerText: {
         fontSize: 22,
         textAlign: 'center',
-        marginBottom: 30,
+        marginTop: 20,
+        marginBottom: 10,
         color: '#784212',
         fontWeight: 'bold',
     },
     buttonContainer: {
         width: '100%',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        marginTop: 20,
-        backgroundColor: '#F5CBA7',
-        alignItems:'center',
-        padding: 10,
-
+        alignItems: 'center',
+        justifyContent:'center'
     },
     button: {
         width: '80%',
@@ -162,10 +161,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        fontSize: 18,
-        color: '#F5CBA7',
-        fontWeight: 'bold',
+        color: '#FFF',
         textAlign: 'center',
+        fontSize: 18,
     },
 });
 

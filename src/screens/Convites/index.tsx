@@ -36,6 +36,8 @@ const Convites = () => {
       </View>
       <View style={styles.content}>
         <Text style={styles.heading}>Convites</Text>
+      </View>
+      <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Aniversário</Text>
         </TouchableOpacity>
@@ -66,6 +68,7 @@ const Convites = () => {
 
 const styles = StyleSheet.create({
   container: {
+    width:'100%',
     flex: 1,
     backgroundColor: '#F5CBA7',
   },
@@ -83,22 +86,28 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   content: {
-    flex: 1,
+    paddingVertical: 10,
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: 'bold',
-    marginVertical: 20,
+    color: '#784212',
+    textAlign:'center',
+  },
+  buttonContainer: {
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+    alignItems:'center',
+    marginTop: 20,
+    marginBottom: 10,
   },
   button: {
     backgroundColor: '#784212',
     padding: 20,
     borderRadius: 10,
     marginBottom: 10,
-    width: '50%',
+    width: '45%',
   },
   buttonText: {
     fontSize: 18,
@@ -107,12 +116,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   footer: {
+    width:'100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#784212',
     paddingVertical: 20,
     paddingHorizontal: 50,
+    position:'absolute',
+    bottom: 0
   },
   addButton: {
     backgroundColor: '#000',

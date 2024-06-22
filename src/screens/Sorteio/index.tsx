@@ -45,6 +45,7 @@ const Sorteio = () => {
                         <View style={styles.profileContainer}>
                             <MaterialIcons name="person" size={24} color='#F5CBA7' />
                             <Text style={styles.label}>{name}</Text>
+                            <Text> </Text>
                         </View>
                     </TouchableOpacity>
                 ))}
@@ -77,8 +78,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     namesContainer: {
-        alignItems: 'center',
-        width: '100%',
+        width: '80%',
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        fontSize: 18,
+        justifyContent:'center',
+        alignSelf:'center',
     },
     headerText: {
         color: '#F5CBA7',
@@ -89,38 +94,39 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 40,
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'space-between',
         backgroundColor: '#784212',
         fontSize: 18,
-        fontWeight: 'bold',
         borderRadius: 10,
         paddingHorizontal: 10,
         shadowColor: '#000',
         shadowOffset: {
-            width: 0,
-            height: 2,
+          width: 0,
+          height: 2,
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
         marginTop: 20,
         marginBottom: 10,
+        alignItems:'center'  
     },
     label: {
-        fontSize: 16,
-        color: '#F5CBA7',
-        marginBottom: 5,
+        textAlign:'left',
+        fontSize: 18,
+        color: '#FFF',
     },
     title: {
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: 'bold',
-        marginVertical: 20,
+        color: '#784212',
+        textAlign:'center'
     },
     footerText: {
         fontSize: 22,
         textAlign: 'center',
-        marginBottom: 30,
+        marginTop: 20,
+        marginBottom: 10,
         color: '#784212',
         fontWeight: 'bold',
     },

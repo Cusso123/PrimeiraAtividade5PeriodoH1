@@ -6,8 +6,8 @@ import UserService from '../../services/UserService/UserService';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('emilys');
+  const [password, setPassword] = useState('emilyspass');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [attempts, setAttempts] = useState(0);
 

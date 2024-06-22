@@ -15,8 +15,8 @@ const DrawerComponent = () => {
     <Drawer.Navigator initialRouteName="Home">
       <Drawer.Screen name="Home" component={Home} options={{ headerShown: false }} />
       <Drawer.Screen name="VisualizarMembro" component={VisualizarMembro} options={{ headerShown: false }} />
-      <Drawer.Screen name="Sorteio" component={Sorteio} options={{ headerShown: false }} />
       <Drawer.Screen name="Convites" component={Convites} options={{ headerShown: false }}/>
+      <Drawer.Screen name="Sorteio" component={Sorteio} options={{ headerShown: false }} />
       <Drawer.Screen name="Sair" component={Login} options={{ headerShown: false }}/>
     </Drawer.Navigator>
   );
