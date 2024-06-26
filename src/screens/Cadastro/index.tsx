@@ -4,6 +4,8 @@ import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert, Image } fro
 import { StackTypes } from '../../routes/stack';
 import UserService from '../../services/UserService/UserService';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import * as ImagePicker from 'expo-image-picker';
+
 
 
 const Cadastro = () => {
@@ -13,7 +15,7 @@ const Cadastro = () => {
   const [confirmaPassword, setConfirmPassword] = useState('');
   const [formError, setFormError] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-
+  const [image, setImage] = useState<string | null>(null);
 
   const userService = new UserService();
   const navigation = useNavigation<StackTypes>();
@@ -42,7 +44,7 @@ const Cadastro = () => {
     try {
       const user = await userService.addUser({
         email,
-        foto: "",
+        foto: image || "",
         nome: name,
         senha: password,
       });
@@ -58,6 +60,25 @@ const Cadastro = () => {
       console.error(error);
     }
   };
+  const pickImage = async () => {
+    let result = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (result.granted === false) {
+      alert("Permissão para acessar a galeria de fotos é necessária!");
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!pickerResult.canceled) {
+      const { uri } = pickerResult.assets[0];
+      setImage(uri);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -65,9 +86,9 @@ const Cadastro = () => {
       <MaterialIcons name="arrow-back" size={24} color='#784212' />
       </TouchableOpacity>
       <Text style={styles.title}>Criar uma conta</Text>
-      <Image source={require('../../../assets/Cadastrar.png')} style={styles.profileImage} />
-      <TouchableOpacity style={styles.imageUploadButton}>
-        <Text style={styles.imageUploadButtonText}>Adicionar imagem</Text>
+      {image && <Image source={{ uri: image }} style={styles.profileImage} />}
+      <TouchableOpacity style={styles.imageUploadButton} onPress={pickImage}>
+      <Text style={styles.imageUploadButtonText}>Adicionar imagem</Text>
       </TouchableOpacity>
       <View style={styles.inputContainer}>
       <View style={styles.form}>
