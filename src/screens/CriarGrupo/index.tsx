@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, Platform, TextInput, Image } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent, DateTimePickerAndroid  } from '@react-native-community/datetimepicker';
 import UserService from '../../services/UserService/UserService';
 import { User } from '../../types/types';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 const CriarGrupo = () => {
     const [nomeDoGrupo, setNomeDoGrupo] = useState('');
@@ -17,7 +18,7 @@ const CriarGrupo = () => {
     const navigation = useNavigation();
     const userService = new UserService();
     const route = useRoute<RouteProp<{ params: User }, 'params'>>();
-    const nomeCapitalizado = route.params?.username;
+    const nomeCapitalizado = route.params?.nome;
 
     const validateForm = () => {
         if (!nomeDoGrupo.trim() || nomeDoGrupo.length > 20) return 'Nome do grupo inválido (máximo de 20 caracteres).';
@@ -40,6 +41,18 @@ const CriarGrupo = () => {
         }
 
         try {
+            const grupo = {
+                "id": 0,
+                "novoGrupo": {
+                  "imagem": "",
+                  "nome": nomeDoGrupo,
+                  "qtdUsuario": maxParticipantes,
+                  "valor": valor,
+                  "dataRevelacao": dataRevelacao,
+                  "descricao": descricao,
+                  "id_Status": 0
+                }
+              };
             const axiosResponse = await userService.createGroup(nomeDoGrupo);
             const result = axiosResponse.data as CreateGroupResponse;
 
@@ -63,13 +76,21 @@ const CriarGrupo = () => {
         setDatePickerVisibility(true);
     };
 
-    const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-        setDatePickerVisibility(Platform.OS === 'ios');
-        if (event.type === 'set' && selectedDate && selectedDate > new Date()) {
-        } else {
-            Alert.alert("Data inválida", "Escolha uma data futura.");
-        }
-    };
+    // const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    //     setDatePickerVisibility(Platform.OS === 'ios');
+    //     if (event.type === 'set' && selectedDate && selectedDate > new Date()) {
+    //     } else {
+    //         Alert.alert("Data inválida", "Escolha uma data futura.");
+    //     }
+    // };
+
+    const setDate = (event: DateTimePickerEvent, date: Date) => {
+        const {
+          type,
+          nativeEvent: {timestamp, utcOffset},
+        } = event;
+      };
+      
 
     return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -130,6 +151,14 @@ const CriarGrupo = () => {
                     keyboardType="numeric"
                     onChangeText={setDataRevelacao}
                     value={dataRevelacao}
+                />
+                {/* <RNDateTimePicker maximumDate={new Date(2030, 10, 20)} minimumDate={new Date(1950, 0, 1)} timeZoneName={'Europe/Prague'}/>; */}
+                <DateTimePicker
+                value={new Date(2030, 10, 20)}
+                mode='date'
+                display='default'
+                onChange={() => {
+                }}
                 />
             </View>
                 <TouchableOpacity style={styles.saveButton} onPress={handleSalvarGrupo}>

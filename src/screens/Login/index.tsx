@@ -6,8 +6,8 @@ import UserService from '../../services/UserService/UserService';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const Login = () => {
-  const [username, setUsername] = useState('emilys');
-  const [password, setPassword] = useState('emilyspass');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
@@ -21,7 +21,7 @@ const Login = () => {
     }
 
     try {
-      const user = await userService.login(username, password);
+      const user = await userService.login(email, password);
       if (user) {
         navigation.navigate('Home');
       } else {
@@ -47,12 +47,12 @@ const Login = () => {
       <Image source={require('../../../assets/Entrar.png')} style={styles.logo} />
       <Text style={styles.title}>Conecte-se</Text>
       <View style={styles.inputContainer}>
-      <Text style={styles.label}>Username:</Text>
+      <Text style={styles.label}>Email:</Text>
         <TextInput
           style={styles.input}
           placeholder=""
-          value={username}
-          onChangeText={setUsername}
+          value={email}
+          onChangeText={setEmail}
           autoCapitalize="none"
         />
       <Text style={styles.label}>Senha:</Text>

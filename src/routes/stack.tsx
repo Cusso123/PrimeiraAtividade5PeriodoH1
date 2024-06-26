@@ -34,7 +34,7 @@ export default function StackComponent(){
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                {/*<Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }}/>`*/}
+                {/*<Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }}/>*/}
                 <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
                 <Stack.Screen name="Cadastro" component={Cadastro} options={{ headerShown: false }}/>
                 <Stack.Screen name="EsqueceuASenha" component={EsqueceuASenha} options={{ headerShown: false }}/>
@@ -44,7 +44,6 @@ export default function StackComponent(){
                 <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false }}/>
                 <Stack.Screen name="VisualizarMembro" component={VisualizarMembro} options={{ headerShown: false }}/>
                 <Stack.Screen name="Sorteio" component={Sorteio} options={{ headerShown: false }}/>
-
             </Stack.Navigator>
         </NavigationContainer>
     );

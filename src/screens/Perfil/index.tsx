@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     imageUploadContainer: {
         width:'100%',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 10,
     },
     backButton: {
         alignSelf: 'flex-start',

@@ -8,8 +8,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const Cadastro = () => {
   const [email, setEmail] = useState('');
-  const [username, setNome] = useState('');
-  const [nomeCompleto, setSobrenome] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmaPassword, setConfirmPassword] = useState('');
   const [formError, setFormError] = useState('');
@@ -25,7 +24,7 @@ const Cadastro = () => {
   };
 
   const handleCadastro = async () => {
-    if (!email || !username || !nomeCompleto || !password || !confirmaPassword) {
+    if (!email || !name || !password || !confirmaPassword) {
       setFormError('Todos os campos são obrigatórios');
       return;
     }
@@ -43,13 +42,13 @@ const Cadastro = () => {
     try {
       const user = await userService.addUser({
         email,
-        username,
-        nomeCT: nomeCompleto,
-        password,
+        foto: "",
+        nome: name,
+        senha: password,
       });
-
+      
       if (user) {
-        Alert.alert('Cadastro realizado com sucesso!', `Bem-vindo(a) ${username}`);
+        Alert.alert('Cadastro realizado com sucesso!', `Bem-vindo(a) ${name}`);
         navigation.navigate('Login'); 
       } else {
         setFormError('Erro ao criar a conta. Tente novamente mais tarde.');
@@ -72,10 +71,8 @@ const Cadastro = () => {
       </TouchableOpacity>
       <View style={styles.inputContainer}>
       <View style={styles.form}>
-        <Text style={styles.label}>Username:</Text>
-        <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="" onChangeText={setNome} value={username} />
-        <Text style={styles.label}>Nome Completo:</Text>
-        <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="" onChangeText={setSobrenome} value={nomeCompleto} />
+        <Text style={styles.label}>Nome:</Text>
+        <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="" onChangeText={setName} value={name} />
         <Text style={styles.label}>Email:</Text>
         <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="" onChangeText={setEmail} value={email} />
         <Text style={styles.label}>Senha:</Text>

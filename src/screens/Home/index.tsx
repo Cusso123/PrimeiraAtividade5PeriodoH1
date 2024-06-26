@@ -8,7 +8,7 @@ import { DrawerNavigationProp } from '@react-navigation/drawer';
 const screenHeight = Dimensions.get('window').height;
 
 type RootStackParamList = {
-  Home: { username: string };
+  Home: { name: string };
   CriarGrupo: undefined;
   Perfil: undefined;
 };
@@ -19,11 +19,11 @@ const Home = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const route = useRoute<RouteProp<RootStackParamList, 'Home'>>();
 
-  const nome = route.params?.username || 'Visitante';
+  const nome = route.params?.name || 'Visitante';
   const nomeCapitalizado = nome.charAt(0).toUpperCase() + nome.slice(1);
 
   const handleNavigate = (screenName: keyof RootStackParamList) => {
-    navigation.navigate(screenName);
+    navigation.navigate('Home');
   };
 
   return (
@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    
   },
   button: {
     backgroundColor: '#784212',
