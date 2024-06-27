@@ -39,7 +39,7 @@ export default function StackComponent(props?: StackNavigation){
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                {/*<Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }}/>*/}
+                <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }}/>
                 <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
                 <Stack.Screen name="Cadastro" component={Cadastro} options={{ headerShown: false }}/>
                 <Stack.Screen name="EsqueceuASenha" component={EsqueceuASenha} options={{ headerShown: false }}/>
