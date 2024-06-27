@@ -4,7 +4,7 @@ import { useNavigation, useRoute, RouteProp, DrawerActions } from '@react-naviga
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import UserService from '../../services/UserService/UserService';
-import { User } from '../../types/types';
+import { User } from '../../types/Usuario';
 import { StackTypes } from '../../routes/stack';
 
 

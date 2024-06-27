@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { User } from '../../types/types';
+import { InterfaceUsuario } from '../../types/types';
 
 const BASE_URL = 'https://localhost:7278';
 
@@ -9,7 +9,7 @@ class UserService {
     // Se necessário, adicione inicializações aqui
   }
 
-  async addUser(user: User): Promise<boolean> {
+  async addUser(user: InterfaceUsuario): Promise<boolean> {
     try {
       user.status = 1;
       const response = await axios.post(`${BASE_URL}/usuario`, user);
@@ -21,9 +21,9 @@ class UserService {
     }
   }
 
-  async login(email: string, password: string): Promise<User | undefined> {
+  async login(email: string, password: string): Promise<InterfaceUsuario | undefined> {
     try {
-      const response: AxiosResponse<User> = await axios.post(`${BASE_URL}/login`, {
+      const response: AxiosResponse<InterfaceUsuario> = await axios.post(`${BASE_URL}/login`, {
         email, 
         senha: password,
       });
@@ -80,9 +80,9 @@ class UserService {
     }
   }
 
-  async updatePerfil(user: User): Promise<{ success: boolean; message?: string }> {
+  async updatePerfil(user: InterfaceUsuario): Promise<{ success: boolean; message?: string }> {
     try {
-      const response = await axios.put(`${BASE_URL}/usuario/${user.id}`, user);
+      const response = await axios.put(`${BASE_URL}/usuario/${user.idUsuario}`, user);
       return { success: true, message: 'Perfil atualizado com sucesso' };
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
@@ -90,7 +90,7 @@ class UserService {
     }
   }
 
-  async getMembros(grupoId: string): Promise<{ data: User[] }> {
+  async getMembros(grupoId: string): Promise<{ data: InterfaceUsuario[] }> {
     try {
       const response = await axios.get(`${BASE_URL}/grupo/${grupoId}/membros`);
       return { data: response.data };
@@ -100,7 +100,7 @@ class UserService {
     }
   }
 
-  async getGrupos(): Promise<{ data: User[] }> {
+  async getGrupos(): Promise<{ data: InterfaceUsuario[] }> {
     try {
       const response = await axios.get(`${BASE_URL}/grupo`);
       return { data: response.data };

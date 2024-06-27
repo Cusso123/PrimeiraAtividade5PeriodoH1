@@ -5,7 +5,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import UserService from '../../services/UserService/UserService';
 import { StackTypes } from '../../routes/stack';
-import { User } from '../../types/types';
+import { User } from '../../types/Usuario';
 
 type RootStackParamList = {
     Home: { username: string };
