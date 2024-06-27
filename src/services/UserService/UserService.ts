@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { User } from '../../types/types';
 
-const BASE_URL = 'https://localhost:7278';
+const BASE_URL = 'http://localhost:5215';
 
 class UserService {
 
