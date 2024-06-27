@@ -1,8 +1,11 @@
-import React from 'react';
-import { Button, View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TextInput, Dimensions, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Button, View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TextInput, Dimensions, FlatList, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp, DrawerActions } from '@react-navigation/native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import UserService from '../../services/UserService/UserService';
+import { StackTypes } from '../../routes/stack';
+import { User } from '../../types/types';
 
 type RootStackParamList = {
     Home: { username: string };
@@ -11,24 +14,70 @@ type RootStackParamList = {
 };
 type HomeScreenNavigationProp = DrawerNavigationProp<RootStackParamList, 'Home'>;
 
-const users = [
-  { id: '1', name: 'Lucas' },
-  { id: '2', name: 'Rodrigo' },
-  { id: '3', name: 'Luana' },
-  { id: '4', name: 'Carlos' },
-];
+type MembroProps = {
+    grupoId: string;
+  };
 
-const Membros = () => {
-
-    const navigation = useNavigation<HomeScreenNavigationProp>();
-    const route = useRoute<RouteProp<RootStackParamList, 'Home'>>();
-
-    const nome = route.params?.username || 'Visitante';
-    const nomeCapitalizado = nome.charAt(0).toUpperCase() + nome.slice(1);
-
-    const handleNavigate = (screenName: keyof RootStackParamList) => {
-        navigation.navigate(screenName);
-    };
+const Membros = (props : MembroProps) => {
+    const [membros, setMembros] = useState<User[]>([]);
+    const navigation = useNavigation<StackTypes>();
+    const route = useRoute();
+    // const { grupoId } = route.params;
+  
+    const fetchMembros = async () => {
+        try {
+          const userService = new UserService();
+          const response = await userService.getMembros(props.grupoId);
+          await setMembros(response.data);
+        } catch (error) {
+          Alert.alert('Erro', 'Não foi possível carregar os membros do grupo.');
+        }
+      };
+  
+      useEffect(() => {
+        fetchMembros();
+      }, []);
+    
+      const handleExpulsar = async (userId : string) => {
+        try {
+          const userService = new UserService();
+          await userService.expulsarMembro(props.grupoId, userId);
+          Alert.alert('Sucesso', 'Membro expulso com sucesso.');
+          fetchMembros();
+        } catch (error) {
+          Alert.alert('Erro', 'Não foi possível expulsar o membro.');
+        }
+      };
+    
+      const handleCompartilhar = () => {
+        // Lógica para compartilhar o grupo
+      };
+    
+      const handleExcluir = async () => {
+        try {
+          const userService = new UserService();
+          await userService.excluirGrupo(props.grupoId);
+          Alert.alert('Sucesso', 'Grupo excluído com sucesso.');
+          navigation.navigate('Home');
+        } catch (error) {
+          Alert.alert('Erro', 'Não foi possível excluir o grupo.');
+        }
+      };
+    
+      const handleSortear = async () => {
+        try {
+          const userService = new UserService();
+          const result = await userService.sortear(props.grupoId);
+          if (result.success) {
+            Alert.alert('Sorteio realizado', 'Os resultados foram enviados para cada participante.');
+          } else {
+            Alert.alert('Erro', result.message || 'Ocorreu um erro durante o sorteio.');
+          }
+        } catch (error) {
+          Alert.alert('Erro', 'Não foi possível realizar o sorteio.');
+        }
+      };
+    
 
     return (
         <View style={styles.container}>
@@ -36,28 +85,27 @@ const Membros = () => {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <MaterialIcons name="arrow-back" size={24} color='#F5CBA7' />
                 </TouchableOpacity>
-                <Text style={styles.headerText}>Olá, {nomeCapitalizado}</Text>
+                <Text style={styles.headerText}>Olá</Text>
                 <TouchableOpacity onPress={() => {}}>
                     <MaterialIcons name="notifications" size={24} color='#F5CBA7'/>
                 </TouchableOpacity>
             </View>
             <View style={styles.titleContainer}>
-                <Text style={styles.title}>Aniversário</Text>
             </View>
             <View style={styles.userListContainer}>
-                <FlatList
-                    data={users}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                        <View style={styles.userContainer}>
-                            <MaterialIcons name="person" size={24} color='#F5CBA7' />
-                            <Text style={styles.userName}>{item.name}</Text>
-                            <TouchableOpacity>
-                                <MaterialIcons name="close" size={24} color='#000' />
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                />
+            <FlatList
+            data={membros}
+            keyExtractor={(item) => (item.id ?? 0).toString()}
+            renderItem={({ item }) => (
+                <View style={styles.userContainer}>
+                <MaterialIcons name="person" size={24} color='#F5CBA7' />
+                <Text style={styles.userName}>{item.nome}</Text>
+                <TouchableOpacity onPress={() => handleExpulsar((item.id ?? 0).toString())}>
+                    <MaterialIcons name="close" size={24} color='#000' />
+                </TouchableOpacity>
+                </View>
+            )}
+            />
             </View>
             <Text style={styles.footerText}>Sorteio não realizado</Text>
             <View style={styles.buttonContainer}>

@@ -1,27 +1,35 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp, DrawerActions } from '@react-navigation/native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { User } from '../../types/types';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import UserService from '../../services/UserService/UserService';
+import { StackTypes } from '../../routes/stack';
 
-type RootStackParamList = {
-    Home: { username: string };
-    CriarGrupo: undefined;
-    Perfil: undefined;
-  };
-  type HomeScreenNavigationProp = DrawerNavigationProp<RootStackParamList, 'Home'>;
+
+interface Convite {
+  id: string;
+  nome: string;
+}
 
 const Convites = () => {
-    const navigation = useNavigation<HomeScreenNavigationProp>();
-    const route = useRoute<RouteProp<RootStackParamList, 'Home'>>();
-  
-    const nome = route.params?.username || 'Visitante';
-    const nomeCapitalizado = nome.charAt(0).toUpperCase() + nome.slice(1);
+  const [convites, setConvites] = useState<Convite[]>([]);
+  const navigation = useNavigation<StackTypes>();
+  const userService = new UserService();
 
-    const handleNavigate = (screenName: keyof RootStackParamList) => {
-        navigation.navigate(screenName);
+  const fetchConvites = async () => {
+    try {
+      const response = await userService.getConvites();
+      setConvites(response.data);
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível carregar os convites.');
     }
+  };
+
+  useEffect(() => {
+    fetchConvites();
+  }, []);
     
     return (
     <View style={styles.container}>
@@ -29,7 +37,7 @@ const Convites = () => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
         <MaterialIcons name="arrow-back" size={24} color='#F5CBA7' />
         </TouchableOpacity>
-        <Text style={styles.title}>Ola, {nomeCapitalizado}</Text>
+        <Text style={styles.title}>Ola</Text>
         <TouchableOpacity onPress={() => {}}>
         <MaterialIcons name="notifications" size={24} color='#F5CBA7'/>
         </TouchableOpacity>
@@ -38,24 +46,13 @@ const Convites = () => {
         <Text style={styles.heading}>Convites</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Aniversário</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Faculdade</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Times de Futebol</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Bingo</Text>
-        </TouchableOpacity>
+
       </View>
       <View style={styles.footer}>
         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
         <MaterialIcons name="menu" size={35} color='#F5CBA7' />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleNavigate('CriarGrupo')} style={styles.addButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('CriarGrupo', {groupId: '0'})} style={styles.addButton}>
         <MaterialIcons name="add-circle" size={35} color='#F5CBA7' />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>

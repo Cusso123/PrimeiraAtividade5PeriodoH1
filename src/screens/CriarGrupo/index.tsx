@@ -1,104 +1,84 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, Platform, TextInput, Image } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import DateTimePicker, { DateTimePickerEvent, DateTimePickerAndroid  } from '@react-native-community/datetimepicker';
 import UserService from '../../services/UserService/UserService';
-import { User } from '../../types/types';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { StackTypes } from '../../routes/stack';
+
+
+type RootStackParamList = {
+    Home: { username: string };
+    CriarGrupo: undefined;
+    Perfil: undefined;
+  };
+  type HomeScreenNavigationProp = DrawerNavigationProp<RootStackParamList, 'Home'>;
 
 const CriarGrupo = () => {
     const [nomeDoGrupo, setNomeDoGrupo] = useState('');
     const [maxParticipantes, setMaxParticipantes] = useState('');
     const [valor, setValor] = useState('');
-    const [dataRevelacao, setDataRevelacao] = useState('');
+    const [dataRevelacao, setDataRevelacao] = useState(new Date());
     const [descricao, setDescricao] = useState('');
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-    const navigation = useNavigation();
+    const navigation = useNavigation<StackTypes>();
     const userService = new UserService();
-    const route = useRoute<RouteProp<{ params: User }, 'params'>>();
-    const nomeCapitalizado = route.params?.nome;
 
-    const validateForm = () => {
+  
+    const handleSalvarGrupo = async () => {
+        // // const errorMessage = validateForm();
+        // // if (errorMessage) {
+        // //   Alert.alert('Erro', errorMessage);
+        // //   return;
+        // // }
+        try  {
+        //   const grupo = {
+        //     nome: nomeDoGrupo,
+        //     maxParticipantes: parseInt(maxParticipantes),
+        //     valor: parseFloat(valor),
+        //     dataRevelacao: undefined,
+        //     descricao: descricao,
+        //   };
+          const grupo = {
+            id: 0,
+            novoGrupo: {
+              imagem: "",
+              nome: nomeDoGrupo,
+              qtdUsuario: maxParticipantes,
+              valor: valor,
+              dataRevelacao: "2024-06-27T04:46:17.249Z",
+              descricao: descricao,
+              id_Status: 1
+            }
+          };
+          const result = await userService.createGroup(grupo);
+          if (result) {
+            Alert.alert('Grupo Criado', `O grupo ${nomeDoGrupo} foi criado com sucesso.`);
+            navigation.navigate('Home');
+          } else {
+            Alert.alert('Erro', result || 'Ocorreu um erro desconhecido.');
+          }
+        } catch (error) {
+          Alert.alert('Erro', 'Não foi possível criar o grupo. Tente novamente mais tarde.');
+        }
+            alert('Não foi possível criar o grupo. Tente novamente mais tarde.');
+      };
+    
+      const validateForm = () => {
         if (!nomeDoGrupo.trim() || nomeDoGrupo.length > 20) return 'Nome do grupo inválido (máximo de 20 caracteres).';
         if (!maxParticipantes.trim() || parseInt(maxParticipantes, 10) < 2) return 'A quantidade de participantes deve ser maior que 1.';
         if (!valor.trim() || parseFloat(valor.replace(',', '.')) <= 0) return 'O valor deve ser maior que 0.';
         if (!descricao.trim()) return 'Por favor, adicione uma descrição ao grupo.';
         return '';
-    };
-
-    interface CreateGroupResponse {
-        success: boolean;
-        message?: string;
-    }
-
-    const handleSalvarGrupo = async () => {
-        const errorMessage = validateForm();
-        if (errorMessage) {
-            Alert.alert('Erro', errorMessage);
-            return;
-        }
-
-        try {
-            const grupo = {
-                "id": 0,
-                "novoGrupo": {
-                  "imagem": "",
-                  "nome": nomeDoGrupo,
-                  "qtdUsuario": maxParticipantes,
-                  "valor": valor,
-                  "dataRevelacao": dataRevelacao,
-                  "descricao": descricao,
-                  "id_Status": 0
-                }
-              };
-            const axiosResponse = await userService.createGroup(nomeDoGrupo);
-            const result = axiosResponse.data as CreateGroupResponse;
-
-            if (result.success) {
-                Alert.alert('Grupo Criado', `O grupo ${nomeDoGrupo} foi criado com sucesso.`);
-                setNomeDoGrupo('');
-                setMaxParticipantes('');
-                setValor('');
-                setDescricao('');
-                navigation.navigate('Home' as never);
-            } else {
-                Alert.alert('Erro', result.message || 'Ocorreu um erro desconhecido.');
-            }
-        } catch (error) {
-            console.error(error);
-            Alert.alert('Erro', 'Não foi possível criar o grupo. Tente novamente mais tarde.');
-        }
-    };
-
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-    // const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    //     setDatePickerVisibility(Platform.OS === 'ios');
-    //     if (event.type === 'set' && selectedDate && selectedDate > new Date()) {
-    //     } else {
-    //         Alert.alert("Data inválida", "Escolha uma data futura.");
-    //     }
-    // };
-
-    const setDate = (event: DateTimePickerEvent, date: Date) => {
-        const {
-          type,
-          nativeEvent: {timestamp, utcOffset},
-        } = event;
       };
       
-
     return (
     <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <MaterialIcons name="arrow-back" size={24} color='#F5CBA7' />
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>Olá, {nomeCapitalizado}</Text>
+                <Text style={styles.headerTitle}>Olá</Text>
                 <TouchableOpacity onPress={() => { }}>
                     <MaterialIcons name="notifications" size={24} color='#F5CBA7' />
                 </TouchableOpacity>
@@ -108,8 +88,8 @@ const CriarGrupo = () => {
             </View>
         <View style={styles.formContainer}>
                 <View style={styles.imageUploadContainer}>
-                    <Image source={require('../../../assets/Grupo.png')} style={styles.groupImage} />
-                    <TouchableOpacity style={styles.imageButton}>
+                <Image source={require('../../../assets/Grupo.png')} style={styles.groupImage} />
+                <TouchableOpacity style={styles.imageButton}>
                         <Text style={styles.imageButtonText}>Adicionar imagem</Text>
                     </TouchableOpacity>
                 </View>
@@ -146,20 +126,12 @@ const CriarGrupo = () => {
                     value={descricao}
                 />
                 <Text style={styles.label}>Data de Revelação: </Text>
-                <TextInput
-                    style={styles.input}
-                    keyboardType="numeric"
-                    onChangeText={setDataRevelacao}
-                    value={dataRevelacao}
-                />
-                {/* <RNDateTimePicker maximumDate={new Date(2030, 10, 20)} minimumDate={new Date(1950, 0, 1)} timeZoneName={'Europe/Prague'}/>; */}
-                <DateTimePicker
-                value={new Date(2030, 10, 20)}
+                {/* <DateTimePicker
+                value={dataRevelacao}
                 mode='date'
                 display='default'
-                onChange={() => {
-                }}
-                />
+                onChange={(event, date) => date && setDataRevelacao(date)}
+                /> */}
             </View>
                 <TouchableOpacity style={styles.saveButton} onPress={handleSalvarGrupo}>
                     <Text style={styles.saveButtonText}>Salvar</Text>

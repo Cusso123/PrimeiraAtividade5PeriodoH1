@@ -1,37 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TextInput, Dimensions  } from 'react-native';
 import { useNavigation, useRoute, RouteProp, DrawerActions   } from '@react-navigation/native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { StackTypes } from '../../routes/stack';
+import UserService from '../../services/UserService/UserService';
 
-
-const screenHeight = Dimensions.get('window').height;
 
 type RootStackParamList = {
-  Home: { name: string };
+  Home: { username: string };
   CriarGrupo: undefined;
   Perfil: undefined;
 };
+
 type HomeScreenNavigationProp = DrawerNavigationProp<RootStackParamList, 'Home'>;
 
-
 const Home = () => {
-  const navigation = useNavigation<HomeScreenNavigationProp>();
-  const route = useRoute<RouteProp<RootStackParamList, 'Home'>>();
+  // const navigation = useNavigation();
+  const navigation = useNavigation<StackTypes>();
+  const userService = new UserService();
 
-  const nome = route.params?.name || 'Visitante';
-  const nomeCapitalizado = nome.charAt(0).toUpperCase() + nome.slice(1);
 
-  const handleNavigate = (screenName: keyof RootStackParamList) => {
-    navigation.navigate('Home');
+  const handleNavigate = (screenName: string) => {
+    // navigation.navigate(screenName);
   };
+
+  const handleCriarGrupo = () => {
+    navigation.navigate('CriarGrupo', {groupId : '1'});
+  };
+  const handlePerfil = () => {
+    navigation.navigate('Perfil');
+  };
+
+const Grupinhos : any = async() => await userService.getGrupos();
+console.log(Grupinhos);
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.header}>
       <Text> </Text>
-        <Text style={styles.headerText1}>Olá, {nomeCapitalizado}</Text>
+        <Text style={styles.headerText1}>Olá</Text>
         <TouchableOpacity onPress={() => {}}>
         <MaterialIcons name="notifications" size={24} color='#F5CBA7'/>
         </TouchableOpacity>
@@ -43,30 +52,16 @@ const Home = () => {
       </View>
       <Text style={styles.sectionTitle}>Grupos</Text>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Aniversário</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Faculdade</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Times de Fute</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Roda da Fortuna</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Bingo da Sorte</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Loteria dos Sonhos</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Caça ao Tesouro</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Banquete de Bônus</Text>
-        </TouchableOpacity>
+      {
+        Grupinhos.data && 
+        Grupinhos.data.map((grupo: any) => {
+          return <View tabIndex={grupo.idGrupo}>
+        <TouchableOpacity  style={styles.button}>
+          <Text style={styles.buttonText}>{grupo.nome}</Text>
+        </TouchableOpacity>          
+        </View>
+        })
+      }
       </View>
       </ScrollView>
       
@@ -74,10 +69,10 @@ const Home = () => {
       <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
       <MaterialIcons name="menu" size={35} color='#F5CBA7' />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleNavigate('CriarGrupo')} style={styles.addButton}>
+        <TouchableOpacity onPress={handleCriarGrupo} style={styles.addButton}>
         <MaterialIcons name="add-circle" size={35} color='#F5CBA7' />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleNavigate('Perfil')}>
+        <TouchableOpacity onPress={handlePerfil}>
         <MaterialIcons name="account-circle" size={35} color='#F5CBA7' />        
         </TouchableOpacity>
       </View>

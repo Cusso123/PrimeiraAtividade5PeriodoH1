@@ -6,23 +6,16 @@ import UserService from '../../services/UserService/UserService';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 
-const EsqueceuASenha = () => {
-  const [email, setEmail] = useState<string>('');
-  
+const RecuperarSenha = () => {
+  const [email, setEmail] = useState('');
   const navigation = useNavigation<StackTypes>();
-  const userService = new UserService();
-
-  const handleLogin = () => {
-    navigation.navigate('Login');
-  };
 
   const handleEsqueceuASenha = async () => {
     try {
+      const userService = new UserService();
       const accountActive = await userService.accountExists(email);
-
       if (accountActive) {
         const passwordSent = await userService.sendTemporaryPassword(email);
-
         if (passwordSent) {
           Alert.alert('Email enviado', 'Uma senha temporária foi enviada para o seu e-mail.');
         } else {
@@ -44,7 +37,7 @@ const EsqueceuASenha = () => {
       <Text style={styles.title}>Esqueceu sua senha?</Text>
       <View style={styles.inputContainer}>
       <Text style={styles.description}>Não se preocupe! Acontece. Por favor, insira o e-mail associado à sua conta.</Text>
-      <Text style={styles.label}>Senha:</Text>
+      <Text style={styles.label}>Email:</Text>
       <TextInput
         style={styles.input}
         placeholder=""
@@ -55,7 +48,7 @@ const EsqueceuASenha = () => {
         <Text style={styles.buttonText2}>Enviar</Text>
       </TouchableOpacity>
     </View>
-      <TouchableOpacity onPress={handleLogin} style={styles.connectButton}>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.connectButton}>
         <Text style={styles.buttonText}>Lembra da senha? <Text style={styles.buttonText1}>Conecte-se</Text></Text>
       </TouchableOpacity>
     </View>
@@ -163,4 +156,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default EsqueceuASenha;
+export default RecuperarSenha;

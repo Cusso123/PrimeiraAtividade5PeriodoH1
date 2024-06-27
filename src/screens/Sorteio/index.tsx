@@ -1,29 +1,56 @@
-import React, { useState } from 'react';
-import { Button, View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TextInput, Dimensions, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Button, View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TextInput, Dimensions, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp, DrawerActions } from '@react-navigation/native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import UserService from '../../services/UserService/UserService';
+import { StackTypes } from '../../routes/stack';
 
 type RootStackParamList = {
-    Home: { username: string };
-    CriarGrupo: undefined;
-    Perfil: undefined;
-};
-type HomeScreenNavigationProp = DrawerNavigationProp<RootStackParamList, 'Home'>;
-
-const Sorteio = () => {
+    Sorteio: { grupoId: string };
+  };
+  type SorteioProps = {
+    grupoId: string;
+  };
+  const SortearAmigoSecreto = (props : SorteioProps) => {
+    const navigation = useNavigation<StackTypes>();
+    const route = useRoute<RouteProp<RootStackParamList, 'Sorteio'>>();
+    // const { grupoId } = route.params;
+    const [names, setNames] = useState<string[]>([]);
     const [selectedName, setSelectedName] = useState<string | null>(null);
-    const navigation = useNavigation<HomeScreenNavigationProp>();
-    const route = useRoute<RouteProp<RootStackParamList, 'Home'>>();
-
-    const nome = route.params?.username || 'Visitante';
-    const nomeCapitalizado = nome.charAt(0).toUpperCase() + nome.slice(1);
-    
-    const names = ['Lucas', 'Rodrigo', 'Luana', 'Carlos'];
-
-    const handleSelect = (name: string) => {
-        setSelectedName(name);
+    const userService = new UserService();
+  
+    useEffect(() => {
+      const fetchNames = async () => {
+        try {
+          const response = await userService.getMembros(props.grupoId);
+          const memberNames = response.data.map(member => member.nome);
+          setNames(memberNames);
+        } catch (error) {
+          Alert.alert('Erro', 'Não foi possível carregar os membros do grupo.');
+        }
+      };
+  
+      fetchNames();
+    }, [props.grupoId]);
+  
+    const handleSortear = async () => {
+      try {
+        const result = await userService.sortear(props.grupoId);
+        if (result.success) {
+          Alert.alert('Sorteio realizado', 'Os resultados foram enviados para cada participante.');
+        } else {
+          Alert.alert('Erro', result.message || 'Ocorreu um erro durante o sorteio.');
+        }
+      } catch (error) {
+        Alert.alert('Erro', 'Não foi possível realizar o sorteio.');
+      }
     };
+  
+    const handleSelect = (name: string) => {
+      setSelectedName(name);
+    };
+  
 
     return (
         <View style={styles.container}>
@@ -31,13 +58,13 @@ const Sorteio = () => {
             <TouchableOpacity onPress={() => navigation.goBack()}>
                     <MaterialIcons name="arrow-back" size={24} color='#F5CBA7' />
                 </TouchableOpacity>
-                <Text style={styles.headerText}>Olá, {nomeCapitalizado}</Text>
+                <Text style={styles.headerText}>Olá</Text>
                 <TouchableOpacity onPress={() => {}}>
                     <MaterialIcons name="notifications" size={24} color='#F5CBA7'/>
                 </TouchableOpacity>
             </View>
             <View style={styles.titleContainer}>
-                <Text style={styles.title}>Aniversário</Text>
+                <Text style={styles.title}>Sorteios</Text>
             </View>
             <View style={styles.namesContainer}>
                 {names.map((name) => (
@@ -132,4 +159,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Sorteio;
+export default SortearAmigoSecreto;

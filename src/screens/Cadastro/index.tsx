@@ -1,12 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native';
 import { StackTypes } from '../../routes/stack';
 import UserService from '../../services/UserService/UserService';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as ImagePicker from 'expo-image-picker';
-
-
 
 const Cadastro = () => {
   const [email, setEmail] = useState('');
@@ -101,18 +99,15 @@ const Cadastro = () => {
         <Text style={styles.label}>Confirmar Senha:</Text>
         <View style={{justifyContent:'center', alignItems:'center', width: '100%' }}>
         <TextInput style={[styles.input, formError ? styles.errorInput : null]} placeholder="" onChangeText={setConfirmPassword} value={confirmaPassword} secureTextEntry={!passwordVisible} />
-
         <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)} style={styles.eyeIcon}>
         <MaterialIcons name={passwordVisible ? 'visibility' : 'visibility-off'} size={24} color="gray" />
         </TouchableOpacity>
       </View>
       </View>
       {formError ? <Text style={styles.errorText}>{formError}</Text> : null}
-
       <TouchableOpacity onPress={handleCadastro} style={styles.button}>
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
-
       <Text style={styles.termsText}>Ao criar uma conta ou assinar você concorda com nossos <Text style={styles.termsText1}>Termos e Condições</Text></Text>
     </View>
     </View>

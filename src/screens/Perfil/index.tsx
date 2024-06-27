@@ -1,8 +1,12 @@
-import React from 'react';
-import { Button, View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TextInput, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Button, View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TextInput, Dimensions, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp, DrawerActions } from '@react-navigation/native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import UserService from '../../services/UserService/UserService';
+import { User } from '../../types/types';
+import { StackTypes } from '../../routes/stack';
+
 
 type RootStackParamList = {
     Home: { username: string };
@@ -12,23 +16,30 @@ type RootStackParamList = {
 type HomeScreenNavigationProp = DrawerNavigationProp<RootStackParamList, 'Home'>;
 
 const Perfil = () => {
-
-    const navigation = useNavigation<HomeScreenNavigationProp>();
-    const route = useRoute<RouteProp<RootStackParamList, 'Home'>>();
-
-    const nome = route.params?.username || 'Visitante';
-    const nomeCapitalizado = nome.charAt(0).toUpperCase() + nome.slice(1);
-
-    const handleNavigate = (screenName: keyof RootStackParamList) => {
-        navigation.navigate(screenName);
+    const [perfil, setPerfil] = useState<User>({ nome: '', email: '', senha: '', foto: '' });
+    const navigation = useNavigation<StackTypes>();
+    const userService = new UserService();
+  
+    const handleSalvarPerfil = async () => {
+      try {
+        const result = await userService.updatePerfil(perfil);
+        if (result.success) {
+          Alert.alert('Perfil Atualizado', 'Suas informações foram atualizadas com sucesso.');
+        } else {
+          Alert.alert('Erro', result.message || 'Ocorreu um erro ao atualizar o perfil.');
+        }
+      } catch (error) {
+        Alert.alert('Erro', 'Não foi possível atualizar o perfil. Tente novamente mais tarde.');
+      }
     };
+
     return (
         <View style={styles.container}>
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                     <MaterialIcons name="arrow-back" size={24} color='#F5CBA7' />
                     </TouchableOpacity>
-                    <Text style={styles.headerText}>Olá, {nomeCapitalizado}</Text>
+                    <Text style={styles.headerText}>Olá</Text>
                     <TouchableOpacity onPress={() => {}}>
                     <MaterialIcons name="notifications" size={24} color='#F5CBA7'/>
                     </TouchableOpacity>
