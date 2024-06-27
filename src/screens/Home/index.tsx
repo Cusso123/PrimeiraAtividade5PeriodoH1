@@ -11,18 +11,27 @@ type RootStackParamList = {
   Home: { username: string };
   CriarGrupo: undefined;
   Perfil: undefined;
+  VisualizarMembro: { grupo: any };
 };
 
 type HomeScreenNavigationProp = DrawerNavigationProp<RootStackParamList, 'Home'>;
 
 const Home = () => {
-  // const navigation = useNavigation();
   const navigation = useNavigation<StackTypes>();
   const userService = new UserService();
+  const [grupos, setGrupos] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchGrupos = async () => {
+      const response = await userService.getGrupos();
+      setGrupos(response.data);
+    };
+    fetchGrupos();
+  }, [grupos]);
 
 
-  const handleNavigate = (screenName: string) => {
-    // navigation.navigate(screenName);
+  const handleVisualizarMembro = (grupo: any) => {
+    navigation.navigate('VisualizarMembro', {groupId : '1'});
   };
 
   const handleCriarGrupo = () => {
@@ -52,19 +61,13 @@ console.log(Grupinhos);
       </View>
       <Text style={styles.sectionTitle}>Grupos</Text>
       <View style={styles.buttonContainer}>
-      {
-        Grupinhos.data && 
-        Grupinhos.data.map((grupo: any) => {
-          return <View tabIndex={grupo.idGrupo}>
-        <TouchableOpacity  style={styles.button}>
-          <Text style={styles.buttonText}>{grupo.nome}</Text>
-        </TouchableOpacity>          
+          {grupos.map((grupo: any) => (
+            <TouchableOpacity key={grupo.idGrupo} onPress={() => handleVisualizarMembro(grupo)} style={styles.button}>
+              <Text style={styles.buttonText}>{grupo.nome}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
-        })
-      }
-      </View>
       </ScrollView>
-      
       <View style={styles.footer}>
       <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
       <MaterialIcons name="menu" size={35} color='#F5CBA7' />

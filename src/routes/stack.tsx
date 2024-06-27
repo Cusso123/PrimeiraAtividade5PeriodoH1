@@ -15,6 +15,7 @@ import Perfil from '../screens/Perfil';
 import VisualizarMembro from '../screens/VisualizarMembro';
 import Sorteio from '../screens/Sorteio';
 
+
 const Stack = createNativeStackNavigator();
 
 
@@ -28,6 +29,9 @@ export type StackNavigation = {
     Grupo: { groupId?: string };
     Convite: { nome: string };
     Perfil: undefined;
+    VisualizarMembro: {groupId: string};
+    Sorteio: { membros: { id: number, nome: string, sorteadoCom: string , grupoId : string}[] };
+
 };
 export type StackTypes = NativeStackNavigationProp<StackNavigation>
 
@@ -45,7 +49,7 @@ export default function StackComponent(props?: StackNavigation){
                 <Stack.Screen name="Convites" component={Convites} options={{ headerShown: false }}/>
                 <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false }}/>
                 <Stack.Screen name="VisualizarMembro" component={() => <VisualizarMembro grupoId={props?.Grupo.groupId ?? '0'}/>} options={{ headerShown: false }}/>
-                <Stack.Screen name="Sorteio" component={() => <Sorteio grupoId={props?.Grupo.groupId ?? '0'}/>} options={{ headerShown: false }}/>
+                <Stack.Screen name="Sorteio" component={Sorteio} options={{ headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

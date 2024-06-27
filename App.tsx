@@ -8,7 +8,17 @@ import StackComponent from './src/routes/stack';
 export default function App() {
 
   return (
-  <StackComponent />
+  <StackComponent Splash={undefined} Home={undefined} Login={undefined} Cadastro={undefined} EsqueceuASenha={undefined} CriarGrupo={{
+      groupId: ""
+    }} Grupo={{
+      groupId: undefined
+    }} Convite={{
+      nome: ""
+    }} Perfil={undefined} VisualizarMembro={{
+      groupId: ""
+    }} Sorteio={{
+      membros: []
+    }} />
   );
 }
 

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { InterfaceUsuario } from '../../types/types';
+import { User } from '../../types/types';
 
 const BASE_URL = 'https://localhost:7278';
 
@@ -9,7 +9,7 @@ class UserService {
     // Se necessário, adicione inicializações aqui
   }
 
-  async addUser(user: InterfaceUsuario): Promise<boolean> {
+  async addUser(user: User): Promise<boolean> {
     try {
       user.status = 1;
       const response = await axios.post(`${BASE_URL}/usuario`, user);
@@ -21,9 +21,9 @@ class UserService {
     }
   }
 
-  async login(email: string, password: string): Promise<InterfaceUsuario | undefined> {
+  async login(email: string, password: string): Promise<User | undefined> {
     try {
-      const response: AxiosResponse<InterfaceUsuario> = await axios.post(`${BASE_URL}/login`, {
+      const response: AxiosResponse<User> = await axios.post(`${BASE_URL}/login`, {
         email, 
         senha: password,
       });
@@ -80,9 +80,9 @@ class UserService {
     }
   }
 
-  async updatePerfil(user: InterfaceUsuario): Promise<{ success: boolean; message?: string }> {
+  async updatePerfil(user: User): Promise<{ success: boolean; message?: string }> {
     try {
-      const response = await axios.put(`${BASE_URL}/usuario/${user.idUsuario}`, user);
+      const response = await axios.put(`${BASE_URL}/usuario/${user.id}`, user);
       return { success: true, message: 'Perfil atualizado com sucesso' };
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
@@ -90,7 +90,7 @@ class UserService {
     }
   }
 
-  async getMembros(grupoId: string): Promise<{ data: InterfaceUsuario[] }> {
+  async getMembros(grupoId: string): Promise<{ data: User[] }> {
     try {
       const response = await axios.get(`${BASE_URL}/grupo/${grupoId}/membros`);
       return { data: response.data };
@@ -100,7 +100,7 @@ class UserService {
     }
   }
 
-  async getGrupos(): Promise<{ data: InterfaceUsuario[] }> {
+  async getGrupos(): Promise<{ data: any[] }> {
     try {
       const response = await axios.get(`${BASE_URL}/grupo`);
       return { data: response.data };
@@ -122,15 +122,25 @@ class UserService {
 
   async excluirGrupo(grupoId: string): Promise<boolean> {
     try {
-      const response = await axios.delete(`${BASE_URL}/grupo/${grupoId}`);
-      return response.status === 200; // Retorna true se o grupo foi excluído com sucesso
-    } catch (error) {
-      console.error('Erro ao excluir grupo:', error);
-      return false; // Retorna false em caso de erro
+        console.log(`Excluindo grupo com ID: ${grupoId}`);
+        const response = await axios.delete(`${BASE_URL}/grupo/${grupoId}`);
+        console.log('Delete Response:', response);
+        return response.status === 200; // Retorna true se o grupo foi excluído com sucesso
+    } catch (error : any) {
+        if (error.response) {
+            console.error('Erro ao excluir grupo - Response Data:', error.response.data);
+            console.error('Erro ao excluir grupo - Response Status:', error.response.status);
+            console.error('Erro ao excluir grupo - Response Headers:', error.response.headers);
+        } else if (error.request) {
+            console.error('Erro ao excluir grupo - Request Data:', error.request);
+        } else {
+            console.error('Erro ao excluir grupo - Message:', error.message);
+        }
+        return false; // Retorna false em caso de erro
     }
-  }
+}
 
-  async sortear(grupoId: string): Promise<{ success: boolean; message?: string }> {
+  async handleSortear(grupoId: string): Promise<{ success: boolean; message?: string }> {
     try {
       const response: AxiosResponse<{ success: boolean; message?: string }> = await axios.post(`${BASE_URL}/grupo/${grupoId}/sortear`);
       return response.data;

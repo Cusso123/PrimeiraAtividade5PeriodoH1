@@ -5,81 +5,80 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import UserService from '../../services/UserService/UserService';
 import { StackTypes } from '../../routes/stack';
-import { User } from '../../types/Usuario';
+import { User } from '../../types/types';
+import Sorteio from '../Sorteio';
 
 type RootStackParamList = {
     Home: { username: string };
     CriarGrupo: undefined;
     Perfil: undefined;
-};
+  };
+  
 type HomeScreenNavigationProp = DrawerNavigationProp<RootStackParamList, 'Home'>;
 
 type MembroProps = {
     grupoId: string;
-  };
+};
 
 const Membros = (props : MembroProps) => {
     const [membros, setMembros] = useState<User[]>([]);
+    const [startsorteio, setStartSorteio] = useState<boolean>(false);
     const navigation = useNavigation<StackTypes>();
-    const route = useRoute();
-    // const { grupoId } = route.params;
-  
+    const route = useRoute();  
+    const fakeMembros: User[] = [
+      { id: 1, nome: 'Membro 1', foto: '', email: '', senha: '' },
+      { id: 2, nome: 'Membro 2', foto: '', email: '', senha: '' },
+      { id: 3, nome: 'Membro 3', foto: '', email: '', senha: '' },
+      { id: 4, nome: 'Membro 4', foto: '', email: '', senha: '' },
+    ];
+
     const fetchMembros = async () => {
         try {
           const userService = new UserService();
           const response = await userService.getMembros(props.grupoId);
-          await setMembros(response.data);
+          setMembros(fakeMembros);
         } catch (error) {
           Alert.alert('Erro', 'Não foi possível carregar os membros do grupo.');
         }
-      };
-  
-      useEffect(() => {
-        fetchMembros();
-      }, []);
-    
-      const handleExpulsar = async (userId : string) => {
-        try {
-          const userService = new UserService();
-          await userService.expulsarMembro(props.grupoId, userId);
-          Alert.alert('Sucesso', 'Membro expulso com sucesso.');
-          fetchMembros();
-        } catch (error) {
-          Alert.alert('Erro', 'Não foi possível expulsar o membro.');
-        }
-      };
-    
-      const handleCompartilhar = () => {
-        // Lógica para compartilhar o grupo
-      };
-    
-      const handleExcluir = async () => {
-        try {
-          const userService = new UserService();
-          await userService.excluirGrupo(props.grupoId);
-          Alert.alert('Sucesso', 'Grupo excluído com sucesso.');
-          navigation.navigate('Home');
-        } catch (error) {
-          Alert.alert('Erro', 'Não foi possível excluir o grupo.');
-        }
-      };
-    
-      const handleSortear = async () => {
-        try {
-          const userService = new UserService();
-          const result = await userService.sortear(props.grupoId);
-          if (result.success) {
-            Alert.alert('Sorteio realizado', 'Os resultados foram enviados para cada participante.');
-          } else {
-            Alert.alert('Erro', result.message || 'Ocorreu um erro durante o sorteio.');
-          }
-        } catch (error) {
-          Alert.alert('Erro', 'Não foi possível realizar o sorteio.');
-        }
-      };
-    
+    };
 
-    return (
+    useEffect(() => {
+        setMembros(fakeMembros);
+    }, []);
+
+    const handleExpulsar = (userId: number) => {
+        const updatedMembros = membros.filter(membro => membro.id !== userId);
+        setMembros(updatedMembros);
+        Alert.alert('Sucesso', 'Membro expulso com sucesso.');
+    };
+    
+    const handleCompartilhar = () => {
+        Alert.alert('Compartilhar', 'Grupo compartilhado com sucesso!');
+    };
+
+    const excluirGrupo = async () => {
+      try {
+          console.log(`Tentando excluir o grupo com ID: ${props.grupoId}`);
+          const userService = new UserService();
+          const success = await userService.excluirGrupo(props.grupoId);
+          if (success) {
+              Alert.alert('Sucesso', 'Grupo excluído com sucesso.');
+              navigation.navigate('Home');
+          } else {
+              Alert.alert('Erro', 'Não foi possível excluir o grupo.');
+          }
+      } catch (error) {
+          Alert.alert('Erro', 'Não foi possível excluir o grupo.');
+      }
+  };
+
+    if(startsorteio) {
+      return(
+        <Sorteio/>
+      )
+    }
+    else {
+      return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -93,34 +92,35 @@ const Membros = (props : MembroProps) => {
             <View style={styles.titleContainer}>
             </View>
             <View style={styles.userListContainer}>
-            <FlatList
-            data={membros}
-            keyExtractor={(item) => (item.id ?? 0).toString()}
-            renderItem={({ item }) => (
-                <View style={styles.userContainer}>
-                <MaterialIcons name="person" size={24} color='#F5CBA7' />
-                <Text style={styles.userName}>{item.nome}</Text>
-                <TouchableOpacity onPress={() => handleExpulsar((item.id ?? 0).toString())}>
-                    <MaterialIcons name="close" size={24} color='#000' />
-                </TouchableOpacity>
-                </View>
-            )}
-            />
+                <FlatList
+                    data={membros}
+                    keyExtractor={(item) => item.id?.toString() ?? ''}
+                    renderItem={({ item }) => (
+                        <View style={styles.userContainer}>
+                            <MaterialIcons name="person" size={24} color='#F5CBA7' />
+                            <Text style={styles.userName}>{item.nome}</Text>
+                            <TouchableOpacity onPress={() => item.id && handleExpulsar(item.id)}>
+                                <MaterialIcons name="close" size={24} color='#000' />
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                />
             </View>
             <Text style={styles.footerText}>Sorteio não realizado</Text>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={handleCompartilhar}>
                     <Text style={styles.buttonText}>Compartilhar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={excluirGrupo}>
                     <Text style={styles.buttonText}>Excluir</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Sortear</Text>
+                <TouchableOpacity style={styles.button} onPress={() => setStartSorteio(true)}>
+                    <Text style={styles.buttonText}>Sorteio</Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
+  };
 };
 
 const styles = StyleSheet.create({

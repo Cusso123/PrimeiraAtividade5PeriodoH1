@@ -6,6 +6,7 @@ import UserService from '../../services/UserService/UserService';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { StackTypes } from '../../routes/stack';
+import * as ImagePicker from 'expo-image-picker';
 
 
 type RootStackParamList = {
@@ -15,38 +16,32 @@ type RootStackParamList = {
   };
   type HomeScreenNavigationProp = DrawerNavigationProp<RootStackParamList, 'Home'>;
 
-const CriarGrupo = () => {
+  const CriarGrupo = () => {
     const [nomeDoGrupo, setNomeDoGrupo] = useState('');
     const [maxParticipantes, setMaxParticipantes] = useState('');
+    const [image, setImage] = useState<string | null>(null);
     const [valor, setValor] = useState('');
     const [dataRevelacao, setDataRevelacao] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false);
     const [descricao, setDescricao] = useState('');
     const navigation = useNavigation<StackTypes>();
     const userService = new UserService();
 
-  
     const handleSalvarGrupo = async () => {
-        // // const errorMessage = validateForm();
-        // // if (errorMessage) {
-        // //   Alert.alert('Erro', errorMessage);
-        // //   return;
-        // // }
+        const errorMessage = validateForm();
+        if (errorMessage) {
+          Alert.alert('Erro', errorMessage);
+          return;
+        }
         try  {
-        //   const grupo = {
-        //     nome: nomeDoGrupo,
-        //     maxParticipantes: parseInt(maxParticipantes),
-        //     valor: parseFloat(valor),
-        //     dataRevelacao: undefined,
-        //     descricao: descricao,
-        //   };
           const grupo = {
             id: 0,
             novoGrupo: {
-              imagem: "",
+              imagem: image,
               nome: nomeDoGrupo,
               qtdUsuario: maxParticipantes,
               valor: valor,
-              dataRevelacao: "2024-06-27T04:46:17.249Z",
+              dataRevelacao: dataRevelacao.toISOString(),
               descricao: descricao,
               id_Status: 1
             }
@@ -56,21 +51,47 @@ const CriarGrupo = () => {
             Alert.alert('Grupo Criado', `O grupo ${nomeDoGrupo} foi criado com sucesso.`);
             navigation.navigate('Home');
           } else {
-            Alert.alert('Erro', result || 'Ocorreu um erro desconhecido.');
+            Alert.alert('Erro', 'Ocorreu um erro desconhecido.');
+            navigation.navigate('Home');
           }
         } catch (error) {
           Alert.alert('Erro', 'Não foi possível criar o grupo. Tente novamente mais tarde.');
         }
-            alert('Não foi possível criar o grupo. Tente novamente mais tarde.');
-      };
-    
-      const validateForm = () => {
+    };
+
+    const validateForm = () => {
         if (!nomeDoGrupo.trim() || nomeDoGrupo.length > 20) return 'Nome do grupo inválido (máximo de 20 caracteres).';
         if (!maxParticipantes.trim() || parseInt(maxParticipantes, 10) < 2) return 'A quantidade de participantes deve ser maior que 1.';
         if (!valor.trim() || parseFloat(valor.replace(',', '.')) <= 0) return 'O valor deve ser maior que 0.';
         if (!descricao.trim()) return 'Por favor, adicione uma descrição ao grupo.';
         return '';
-      };
+    };
+
+    const pickImage = async () => {
+        let result = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (result.granted === false) {
+          alert("Permissão para acessar a galeria de fotos é necessária!");
+          return;
+        }
+    
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+    
+        if (!pickerResult.canceled) {
+          const { uri } = pickerResult.assets[0];
+          setImage(uri);
+        }
+    };
+
+    const handleDateChange = (event: any, selectedDate?: Date) => {
+        const currentDate = selectedDate || dataRevelacao;
+        setShowDatePicker(false);
+        setDataRevelacao(currentDate);
+    };
       
     return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -88,10 +109,10 @@ const CriarGrupo = () => {
             </View>
         <View style={styles.formContainer}>
                 <View style={styles.imageUploadContainer}>
-                <Image source={require('../../../assets/Grupo.png')} style={styles.groupImage} />
-                <TouchableOpacity style={styles.imageButton}>
-                        <Text style={styles.imageButtonText}>Adicionar imagem</Text>
-                    </TouchableOpacity>
+                {image && <Image source={{ uri: image }} style={styles.groupImage} />}
+            <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
+            <Text style={styles.imageButtonText}>Adicionar imagem</Text>
+            </TouchableOpacity>   
                 </View>
             <View style={styles.labelContainer}>
                 <Text style={styles.label}>Nome do Grupo: </Text>
@@ -125,13 +146,16 @@ const CriarGrupo = () => {
                     onChangeText={setDescricao}
                     value={descricao}
                 />
-                <Text style={styles.label}>Data de Revelação: </Text>
-                {/* <DateTimePicker
+                <Text style={styles.label}>Data de Revelação: </Text> 
+            <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
+              <Text>{dataRevelacao.toLocaleDateString()}</Text>
+            </TouchableOpacity>
+                <DateTimePicker
                 value={dataRevelacao}
                 mode='date'
-                display='default'
-                onChange={(event, date) => date && setDataRevelacao(date)}
-                /> */}
+                display='calendar'
+                onChange={handleDateChange}
+                />
             </View>
                 <TouchableOpacity style={styles.saveButton} onPress={handleSalvarGrupo}>
                     <Text style={styles.saveButtonText}>Salvar</Text>
